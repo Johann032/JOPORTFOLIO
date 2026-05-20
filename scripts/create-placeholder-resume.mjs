@@ -1,0 +1,15 @@
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const outDir = path.join(__dirname, "..", "public", "resume")
+const outFile = path.join(outDir, "johann-cherian-ajish-resume.pdf")
+
+// Minimal valid single-page PDF
+const b64 =
+  "JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMiAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFszIDAgUl0KL0NvdW50IDEKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA2MTIgNzkyXQovQ29udGVudHMgNCAwIFIKL1Jlc291cmNlcyA8PAovRm9udCA8PAovRjEgNSAwIFIKPj4KPj4KZW5kb2JqCjQgMCBvYmoKPDwKL0xlbmd0aCAxMDAKPj4Kc3RyZWFtCkJUCi9GMSAyNCBUZgoxMDAgNzAwIFRkCihKb2hhbm4gQ2hlcmlhbiBBamlzaCkgVGoKMCAtMzYgVGQKL0YxIDE0IFRmCihSZXN1bWUgLSBSZXBsYWNlIHdpdGggeW91ciBQREYpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKNSAwIG9iago8PAovVHlwZSAvRm9udAovU3VidHlwZSAvVHlwZTEKL0Jhc2VGb250IC9IZWx2ZXRpY2EKPj4KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAxNSAwMDAwMCBuIAowMDAwMDAwMDY0IDAwMDAwIG4gCjAwMDAwMDAxMTkgMDAwMDAgbiAKMDAwMDAwMDI3NCAwMDAwMCBuIAowMDAwMDAwNDE1IDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgNiAvUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKNTA1CiUlRU9G"
+
+fs.mkdirSync(outDir, { recursive: true })
+fs.writeFileSync(outFile, Buffer.from(b64, "base64"))
+console.log("Wrote", outFile)
