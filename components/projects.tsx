@@ -5,33 +5,12 @@ import { ArrowUpRight, Lock } from "lucide-react"
 
 const projects = [
   {
-    title: "Security Toolkit",
-    description: "A collection of security tools for network analysis, vulnerability scanning, and penetration testing automation.",
-    tags: ["Python", "Security", "Automation"],
-    status: "coming-soon",
+    title: "SentryXai",
+    description: "SentryXai is a professional AI-integrated Security Operations Center (SOC) dashboard designed to enhance threat detection, incident analysis, and security monitoring through intelligent automation and real-time analytics.",
+    tags: ["AI / ML", "SOC", "Threat Intelligence", "SIEM", "Python", "React"],
+    status: "in-development",
     image: null,
-  },
-  {
-    title: "Portfolio Website",
-    description: "This very website you are viewing. Built with modern technologies and a focus on performance and aesthetics.",
-    tags: ["Next.js", "TypeScript", "Tailwind"],
-    status: "live",
-    image: null,
-  },
-  {
-    title: "CTF Challenge Platform",
-    description: "A platform for hosting and solving Capture The Flag cybersecurity challenges with a community focus.",
-    tags: ["React", "Node.js", "PostgreSQL"],
-    status: "coming-soon",
-    image: null,
-  },
-  {
-    title: "System Monitor Dashboard",
-    description: "Real-time system monitoring dashboard with beautiful visualizations and alerting capabilities.",
-    tags: ["Python", "React", "WebSocket"],
-    status: "coming-soon",
-    image: null,
-  },
+  }
 ]
 
 export function Projects() {
@@ -82,12 +61,12 @@ export function Projects() {
                     {/* Project image placeholder */}
                     <div className="aspect-[4/3] bg-gradient-to-br from-secondary to-muted relative overflow-hidden">
                       <div className="absolute inset-0 flex items-center justify-center">
-                        {project.status === "coming-soon" ? (
+                        {project.status === "in-development" ? (
                           <div className="flex flex-col items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-background/10 flex items-center justify-center">
-                              <Lock className="w-5 h-5 text-foreground/40" />
+                            <div className="w-12 h-12 rounded-full bg-background/10 flex items-center justify-center border border-border/20">
+                              <Lock className="w-5 h-5 text-foreground/60" />
                             </div>
-                            <span className="text-xs text-foreground/40 tracking-wide">Coming Soon</span>
+                            <span className="text-xs text-foreground/60 tracking-wide font-medium bg-background/30 px-3 py-1.5 rounded-full border border-border/10">Currently in Development</span>
                           </div>
                         ) : (
                           <div className="text-5xl font-bold text-foreground/5">

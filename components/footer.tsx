@@ -49,15 +49,7 @@ export function Footer() {
             </p>
 
             <div className="flex items-center gap-4">
-              <a
-                href={site.linkedIn}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={16} />
-              </a>
+
               <a
                 href={`mailto:${site.email}`}
                 className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
