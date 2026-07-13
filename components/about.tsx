@@ -15,7 +15,7 @@ export function About() {
   return (
     <section id="about" className="py-32 md:py-48 px-6 relative overflow-hidden">
       {/* Background accent */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      <div className="section-divider absolute top-0 left-0 right-0" />
       
       <div className="max-w-7xl mx-auto" ref={containerRef}>
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
@@ -42,7 +42,7 @@ export function About() {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true, margin: "-100px" }}
             >
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground leading-[1.1] tracking-tight text-balance mb-12">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight text-balance mb-16">
                 Building the future,
                 <br />
                 <span className="text-muted-foreground">one line at a time.</span>
@@ -76,10 +76,10 @@ export function About() {
                 className="space-y-6"
               >
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  My interests span across <span className="text-foreground">cybersecurity</span>, 
-                  <span className="text-foreground"> software development</span>, 
-                  <span className="text-foreground"> reverse engineering</span>, and 
-                  <span className="text-foreground"> problem solving</span>.
+                  My interests span across <span className="text-foreground font-medium">cybersecurity</span>, 
+                  <span className="text-foreground font-medium"> software development</span>, 
+                  <span className="text-foreground font-medium"> reverse engineering</span>, and 
+                  <span className="text-foreground font-medium"> problem solving</span>.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
                   I believe in learning by doing, constantly pushing myself to tackle 
@@ -111,7 +111,7 @@ export function About() {
                     viewport={{ once: true }}
                     className="text-center md:text-left"
                   >
-                    <div className="text-3xl md:text-4xl font-semibold text-foreground mb-2">
+                    <div className="text-4xl md:text-5xl font-bold text-foreground mb-3 tracking-tight">
                       {stat.value}
                     </div>
                     <div className="text-sm text-muted-foreground">

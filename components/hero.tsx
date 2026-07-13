@@ -1,147 +1,237 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef } from "react"
-import { ArrowDown } from "lucide-react"
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion"
+import { useRef, useState, useEffect } from "react"
 import { ResumeModal } from "@/components/resume-modal"
 import { scrollToSection } from "@/lib/scroll"
+import { useIntro } from "@/components/intro-context"
+
+// Scramble text effect for a premium "decryption" feel
+const ScrambleText = ({ text, delay }: { text: string, delay: number }) => {
+  const [displayText, setDisplayText] = useState("")
+  const [isScrambling, setIsScrambling] = useState(false)
+  const [hasStarted, setHasStarted] = useState(false)
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*"
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout
+    let interval: NodeJS.Timeout
+
+    timeout = setTimeout(() => {
+      setHasStarted(true)
+      setIsScrambling(true)
+      let iteration = 0
+      
+      interval = setInterval(() => {
+        setDisplayText(
+          text
+            .split("")
+            .map((char, index) => {
+              if (index < iteration) {
+                return text[index]
+              }
+              return char === " " ? " " : chars[Math.floor(Math.random() * chars.length)]
+            })
+            .join("")
+        )
+        
+        if (iteration >= text.length) {
+          clearInterval(interval)
+          setIsScrambling(false)
+        }
+        
+        iteration += 1 / 2 // Speed of decryption
+      }, 30)
+    }, delay * 1000)
+
+    return () => {
+      clearTimeout(timeout)
+      clearInterval(interval)
+    }
+  }, [text, delay])
+
+  if (!hasStarted) return <span className="opacity-0">{text}</span>
+
+  return (
+    <span className={isScrambling ? "text-accent font-mono" : "text-white transition-colors duration-500"}>
+      {displayText}
+    </span>
+  )
+}
 
 export function Hero() {
+  const { isIntroComplete } = useIntro()
   const containerRef = useRef<HTMLDivElement>(null)
+
+  
+  // Parallax effect
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   })
-  
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"])
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
+
+  // Mouse interaction
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  
+  const springConfig = { damping: 50, stiffness: 100, mass: 1 }
+  const spotlightX = useSpring(mouseX, springConfig)
+  const spotlightY = useSpring(mouseY, springConfig)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    const moveX = ((e.clientX - centerX) / (rect.width / 2)) * 40
+    const moveY = ((e.clientY - centerY) / (rect.height / 2)) * 40
+    mouseX.set(moveX)
+    mouseY.set(moveY)
+  }
+
+  const premiumEasing = [0.16, 1, 0.3, 1]
 
   return (
     <section 
       ref={containerRef}
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      onMouseMove={handleMouseMove}
+      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-transparent perspective-1000"
     >
-      {/* Subtle background grid */}
-      <motion.div
+      {isIntroComplete && (
+        <>
+          {/* Dynamic Background System */}
+          
+          {/* 1. Animated Grid that draws itself in */}
+          <motion.div 
+            className="absolute inset-0 pointer-events-none opacity-[0.03]"
+            initial={{ scale: 1.1, opacity: 0 }}
+            animate={{ scale: 1, opacity: 0.03 }}
+            transition={{ duration: 3, ease: premiumEasing }}
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px)
+              `,
+              backgroundSize: '40px 40px',
+              maskImage: 'radial-gradient(circle at center, black 0%, transparent 80%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 0%, transparent 80%)'
+            }}
+          />
+
+      {/* 2. Interactive Spotlight */}
+      <motion.div 
+        className="absolute inset-0 pointer-events-none flex items-center justify-center mix-blend-screen"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 bg-grid bg-grid-fade opacity-40"
-      />
-      
-      {/* Floating gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-muted/20 blur-[120px] animate-float" />
+        transition={{ duration: 2, delay: 0.5 }}
+      >
+        <motion.div 
+          className="w-[1000px] h-[1000px] rounded-full"
+          style={{
+            x: spotlightX,
+            y: spotlightY,
+            background: "radial-gradient(circle at center, rgba(110, 231, 255, 0.04) 0%, transparent 50%)",
+            filter: "blur(60px)"
+          }}
+        />
+      </motion.div>
+
+      {/* 3. System boot shockwave effect */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-muted/15 blur-[100px] animate-float-delayed"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[2px] bg-accent blur-[2px] pointer-events-none"
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{ scaleX: [0, 1, 0], opacity: [0, 0.8, 0] }}
+        transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
       />
-      
-      {/* Radial gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_70%)]" />
 
       <motion.div 
-        style={{ y, opacity, scale }}
-        className="relative z-10 max-w-5xl mx-auto px-6 text-center"
+        style={{ y, opacity }}
+        className="relative z-10 max-w-5xl mx-auto px-6 flex flex-col items-center justify-center text-center mt-8"
       >
-        {/* Overline */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-8"
-        >
-          <span className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-muted-foreground tracking-wide max-w-xl mx-auto">
-            <span className="hidden sm:inline w-8 h-px bg-border" />
-            Computer Science Engineering
-            <span className="text-border/80">·</span>
-            Cybersecurity
-            <span className="text-border/80">·</span>
-            Software Development
-            <span className="hidden sm:inline w-8 h-px bg-border" />
+        {/* Name with Scramble Decrypt Effect */}
+        <div className="mb-12 h-6 flex items-center justify-center">
+          <span className="text-sm md:text-base font-bold tracking-[0.3em] uppercase">
+            <ScrambleText text="JOHANN CHERIAN AJISH" delay={1.2} />
           </span>
-        </motion.div>
+        </div>
 
-        {/* Main headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold text-foreground tracking-tight leading-[1.05] text-balance mb-8"
-        >
-          Johann Cherian
-          <br />
-          <span className="text-muted-foreground">Ajish</span>
-        </motion.h1>
+        {/* Heading with 3D Flip Reveal */}
+        <div className="relative text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold text-white tracking-tighter leading-[1.05] mb-12 flex flex-col items-center" style={{ perspective: "1000px" }}>
+          
+          <div className="overflow-hidden py-2" style={{ transformStyle: "preserve-3d" }}>
+            <motion.div 
+              initial={{ opacity: 0, rotateX: -90, y: 40 }}
+              animate={{ opacity: 1, rotateX: 0, y: 0 }}
+              transition={{ duration: 1, delay: 2.2, ease: [0.23, 1, 0.32, 1] }}
+              style={{ transformOrigin: "top" }}
+              className="drop-shadow-lg"
+            >
+              Building secure systems
+            </motion.div>
+          </div>
+          
+          <div className="overflow-hidden py-2" style={{ transformStyle: "preserve-3d" }}>
+            <motion.div 
+              initial={{ opacity: 0, rotateX: -90, y: 40 }}
+              animate={{ opacity: 1, rotateX: 0, y: 0 }}
+              transition={{ duration: 1, delay: 2.4, ease: [0.23, 1, 0.32, 1] }}
+              style={{ transformOrigin: "top" }}
+              className="drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/70"
+            >
+              with intelligence.
+            </motion.div>
+          </div>
 
-        {/* Subheadline */}
+          {/* High-tech scanner sweep over the text */}
+          <motion.div
+            initial={{ y: "-200%", opacity: 0 }}
+            animate={{ y: "300%", opacity: [0, 0.15, 0] }}
+            transition={{ duration: 1.2, delay: 3.5, ease: "linear" }}
+            className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-b from-transparent via-accent to-transparent w-full h-[40%]"
+          />
+        </div>
+
+        {/* Description */}
         <motion.p
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-pretty mb-12"
+          initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
+          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+          transition={{ duration: 1, delay: 3.0, ease: premiumEasing }}
+          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-loose text-pretty mb-16 font-medium"
         >
-          Engineering secure, thoughtful software at the intersection of systems and
-          cybersecurity—with a focus on elegant development and disciplined problem solving.
+          Computer Science student focused on cybersecurity, AI, and defensive engineering.
         </motion.p>
 
-        {/* CTAs */}
+        {/* Buttons with subtle entry */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 3.6, ease: premiumEasing }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
         >
-          <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault()
-              scrollToSection("#contact")
-            }}
-            className="btn-premium btn-premium-primary group"
-          >
-            Get in touch
-            <span className="w-5 h-5 rounded-full bg-background/20 flex items-center justify-center group-hover:bg-background/30 transition-colors duration-300">
-              <ArrowDown size={12} className="text-background rotate-[-90deg]" />
-            </span>
-          </a>
-          <ResumeModal variant="secondary" />
           <a
             href="#projects"
             onClick={(e) => {
               e.preventDefault()
               scrollToSection("#projects")
             }}
-            className="btn-premium btn-premium-ghost"
+            className="relative group overflow-hidden btn-premium-primary border border-accent/20 bg-card hover:border-accent hover:shadow-[0_0_20px_rgba(110,231,255,0.2)] transition-all duration-500"
           >
-            View my work
+            <span className="relative z-10">View Projects</span>
+            {/* Button internal flare */}
+            <motion.div 
+              className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-accent/20 to-transparent skew-x-[-20deg]"
+              initial={{ left: "-100%" }}
+              whileHover={{ left: "200%" }}
+              transition={{ duration: 0.7, ease: "easeInOut" }}
+            />
           </a>
+          <ResumeModal variant="secondary" />
         </motion.div>
       </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-3"
-        >
-          <span className="text-xs text-muted-foreground tracking-widest uppercase">Scroll</span>
-          <motion.div
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
-            transition={{ delay: 1.7, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="w-px h-12 bg-gradient-to-b from-muted-foreground/50 to-transparent origin-top"
-          />
-        </motion.div>
-      </motion.div>
+        </>
+      )}
     </section>
   )
 }

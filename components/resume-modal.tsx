@@ -99,9 +99,9 @@ export function ResumeModal({
             <motion.div
               className={cn(
                 "relative z-10 flex w-full flex-col overflow-hidden",
-                "border border-border/40 bg-background/95 backdrop-blur-3xl shadow-2xl",
+                "border border-border bg-card shadow-2xl",
                 "h-[100dvh] sm:h-auto sm:max-w-[560px]",
-                "rounded-none sm:rounded-[24px]"
+                "rounded-none sm:rounded-[14px]"
               )}
               initial={{ opacity: 0, y: 32, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -140,7 +140,7 @@ export function ResumeModal({
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-accent/10 hover:text-accent transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] border border-border"
                     aria-label="Close"
                   >
                     <X size={18} />
@@ -200,7 +200,7 @@ export function ResumeModal({
                             checked={hasAgreed}
                             onChange={(e) => setHasAgreed(e.target.checked)}
                           />
-                          <div className="w-5 h-5 rounded border-2 border-muted-foreground/40 peer-checked:border-foreground peer-checked:bg-foreground flex items-center justify-center transition-all duration-200">
+                          <div className="w-5 h-5 rounded border-2 border-muted-foreground/40 peer-checked:border-accent peer-checked:bg-accent flex items-center justify-center transition-all duration-200">
                             <motion.svg 
                               initial={false}
                               animate={{ opacity: hasAgreed ? 1 : 0, scale: hasAgreed ? 1 : 0.5 }}
@@ -224,11 +224,11 @@ export function ResumeModal({
                   </div>
                   
                   {/* Actions */}
-                  <div className="mt-8 flex items-center gap-3 pt-6 border-t border-border/30">
+                  <div className="mt-8 flex items-center gap-3 pt-6 border-t border-border">
                     <button
                       type="button"
                       onClick={() => setOpen(false)}
-                      className="flex-1 py-3.5 px-4 rounded-xl text-sm font-medium text-foreground bg-secondary/50 hover:bg-secondary border border-border/50 transition-colors"
+                      className="flex-1 btn-premium-secondary"
                     >
                       Cancel
                     </button>
@@ -237,13 +237,13 @@ export function ResumeModal({
                       onClick={handleDownload}
                       disabled={!hasAgreed}
                       className={cn(
-                        "flex-1 py-3.5 px-4 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all duration-300",
+                        "flex-1",
                         hasAgreed
-                          ? "bg-foreground text-background shadow-lg hover:scale-[1.02] active:scale-[0.98]"
-                          : "bg-secondary/50 text-muted-foreground border border-border/50 cursor-not-allowed opacity-60"
+                          ? "btn-premium-primary"
+                          : "inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-[14px] text-sm font-medium bg-secondary text-muted-foreground border border-border cursor-not-allowed opacity-60"
                       )}
                     >
-                      <Download size={16} className={hasAgreed ? "animate-bounce-slight" : ""} />
+                      <Download size={16} />
                       Agree & Download
                     </button>
                   </div>

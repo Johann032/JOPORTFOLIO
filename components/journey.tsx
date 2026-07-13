@@ -41,8 +41,7 @@ export function Journey() {
 
   return (
     <section id="journey" className="py-32 md:py-48 px-6 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,var(--secondary)_0%,transparent_50%)]" />
+      <div className="section-divider absolute top-0 left-0 right-0" />
       
       <div className="max-w-7xl mx-auto relative z-10" ref={containerRef}>
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
@@ -58,7 +57,7 @@ export function Journey() {
               <span className="text-sm text-muted-foreground tracking-widest uppercase">
                 Journey
               </span>
-              <h2 className="text-3xl md:text-4xl font-semibold text-foreground mt-4 leading-tight">
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight tracking-tight">
                 My path so far
               </h2>
               <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
@@ -73,7 +72,7 @@ export function Journey() {
               {/* Animated timeline line */}
               <div className="absolute left-0 top-0 bottom-0 w-px bg-border/30">
                 <motion.div 
-                  className="w-full bg-gradient-to-b from-foreground to-foreground/20"
+                  className="w-full bg-gradient-to-b from-accent to-transparent"
                   style={{ height: lineHeight }}
                 />
               </div>
@@ -96,21 +95,21 @@ export function Journey() {
                     {/* Timeline dot */}
                     <div className={`absolute -left-12 top-0 w-3 h-3 rounded-full border-2 ${
                       item.highlight 
-                        ? "bg-foreground border-foreground" 
-                        : "bg-background border-muted-foreground/50"
+                        ? "bg-accent border-accent shadow-[0_0_10px_rgba(125,211,252,0.5)]" 
+                        : "bg-background border-border"
                     }`}>
                       {item.highlight && (
-                        <div className="absolute inset-0 rounded-full bg-foreground animate-ping opacity-20" />
+                        <div className="absolute inset-0 rounded-full bg-accent animate-ping opacity-20" />
                       )}
                     </div>
 
                     {/* Content */}
                     <div className={`${item.highlight ? "" : ""}`}>
                       <div className="flex items-center gap-4 mb-3">
-                        <span className={`text-xs font-medium px-3 py-1 rounded-full ${
+                        <span className={`text-xs font-mono font-medium px-3 py-1 rounded-full border ${
                           item.highlight 
-                            ? "bg-foreground text-background" 
-                            : "bg-secondary text-muted-foreground"
+                            ? "bg-accent/10 text-accent border-accent/20" 
+                            : "bg-background text-muted-foreground border-border"
                         }`}>
                           {item.year}
                         </span>

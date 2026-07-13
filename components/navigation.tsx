@@ -7,17 +7,18 @@ import { Menu, X } from "lucide-react"
 import { ResumeModal } from "@/components/resume-modal"
 import { site } from "@/lib/site"
 import { scrollToSection } from "@/lib/scroll"
+import { useIntro } from "@/components/intro-context"
 
 const navItems = [
   { name: "About", href: "#about" },
   { name: "Skills", href: "#skills" },
-  { name: "Achievements", href: "#achievements" },
   { name: "Journey", href: "#journey" },
   { name: "Projects", href: "#projects" },
   { name: "Contact", href: "#contact" },
 ]
 
 export function Navigation() {
+  const { isIntroComplete } = useIntro()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("")
@@ -57,22 +58,31 @@ export function Navigation() {
 
   return (
     <motion.header
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isIntroComplete ? 1 : 0 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isIntroComplete ? "pointer-events-auto" : "pointer-events-none"
+      } ${
         isScrolled
-          ? "bg-background/60 backdrop-blur-2xl border-b border-border/30"
-          : "bg-transparent"
+          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm"
+          : isIntroComplete ? "bg-transparent" : ""
       }`}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-8 py-5 flex items-center justify-between">
         <Link 
           href="/"
           onClick={scrollToTop}
-          className="text-xl font-medium text-foreground tracking-tight hover:opacity-70 transition-opacity duration-300"
+          className="hover:opacity-70 transition-opacity duration-300 flex items-center"
         >
-          {site.firstName}
+          {isIntroComplete && (
+            <motion.div
+              layoutId="brand-logo"
+              className="text-xl font-bold text-foreground tracking-[0.2em] uppercase"
+            >
+              CH3R14N
+            </motion.div>
+          )}
         </Link>
 
         {/* Desktop Navigation */}
@@ -82,10 +92,10 @@ export function Navigation() {
               <Link
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className={`text-sm transition-all duration-300 relative ${
+                className={`text-sm transition-all duration-300 relative font-medium ${
                   activeSection === item.href.slice(1)
                     ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-accent"
                 }`}
               >
                 {item.name}
@@ -139,7 +149,7 @@ export function Navigation() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden bg-background/95 backdrop-blur-2xl border-b border-border/30 overflow-hidden"
+            className="lg:hidden bg-background/95 backdrop-blur-md border-b border-border overflow-hidden"
           >
             <ul className="flex flex-col px-6 py-8 gap-6">
               {navItems.map((item, index) => (
@@ -152,7 +162,7 @@ export function Navigation() {
                   <Link
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className="text-2xl font-light text-foreground hover:text-muted-foreground transition-colors duration-300"
+                    className="text-2xl font-light text-foreground hover:text-accent transition-colors duration-300"
                   >
                     {item.name}
                   </Link>

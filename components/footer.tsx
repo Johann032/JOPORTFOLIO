@@ -13,7 +13,7 @@ export function Footer() {
 
   return (
     <footer className="py-16 md:py-24 px-6 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      <div className="section-divider absolute top-0 left-0 right-0" />
       
       <div className="max-w-7xl mx-auto">
         <motion.div
@@ -35,7 +35,7 @@ export function Footer() {
             
             <button
               onClick={scrollToTop}
-              className="group w-14 h-14 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              className="group w-14 h-14 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:border-accent/40 hover:text-accent transition-all duration-300 hover:-translate-y-1"
               aria-label="Scroll to top"
             >
               <ArrowUp className="w-5 h-5" />
@@ -43,7 +43,7 @@ export function Footer() {
           </div>
 
           {/* Bottom section */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-border/30">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-border">
             <p className="text-sm text-muted-foreground">
               {currentYear} {site.name}. All rights reserved.
             </p>
@@ -52,7 +52,7 @@ export function Footer() {
 
               <a
                 href={`mailto:${site.email}`}
-                className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:border-accent/40 hover:text-accent transition-all duration-300 hover:-translate-y-0.5"
                 aria-label="Email"
               >
                 <Mail size={16} />
