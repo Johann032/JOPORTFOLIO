@@ -2,17 +2,12 @@
 
 import { motion } from "framer-motion"
 import { LiveBorderCard } from "@/components/ui/live-border-card"
+import Link from "next/link"
+import { ChevronRight } from "lucide-react"
 
-const projectsList = [
-  {
-    title: "SentryXAI",
-    status: "Currently in Development",
-    description: "An enterprise-grade Security Operations Center (SOC) dashboard designed to enhance threat detection, incident analysis, and security monitoring through intelligent automation and real-time analytics.",
-    tech: ["Python", "React", "TypeScript", "TensorFlow", "PostgreSQL"]
-  }
-]
+export function Projects({ projects }: { projects: any[] }) {
+  if (!projects || projects.length === 0) return null
 
-export function Projects() {
   return (
     <section id="projects" className="py-20 md:py-32 lg:py-48 px-4 sm:px-6 relative overflow-hidden">
       <div className="section-divider absolute top-0 left-0 right-0" />
@@ -39,9 +34,9 @@ export function Projects() {
 
           {/* Right column - Vertical List */}
           <div className="lg:col-span-9 space-y-8">
-            {projectsList.map((project, index) => (
+            {projects.map((project, index) => (
               <motion.div
-                key={project.title}
+                key={project.slug}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ 
@@ -51,36 +46,57 @@ export function Projects() {
                 }}
                 viewport={{ once: true, margin: "-50px" }}
               >
-                <LiveBorderCard className="p-6 sm:p-8 lg:p-12 flex flex-col gap-6 sm:gap-8 items-start w-full">
-                  <div className="w-full space-y-6 relative z-10">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight group-hover:text-white transition-colors duration-300">
-                        {project.title}
-                      </h3>
-                      {project.status && (
-                        <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-mono font-medium text-muted-foreground bg-secondary/30 border border-border rounded-full uppercase tracking-wider">
-                          <span className="w-1.5 h-1.5 rounded-full bg-white" />
-                          {project.status}
+                <Link href={`/projects/${project.slug}`} className="block">
+                  <LiveBorderCard className="p-6 sm:p-8 lg:p-12 flex flex-col gap-6 sm:gap-8 items-start w-full transition-transform hover:-translate-y-1">
+                    <div className="w-full space-y-6 relative z-10">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 border-b border-[#2A2A2A] pb-6">
+                        <div className="flex items-center gap-4">
+                          <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                            {project.title}
+                          </h3>
+                          {project.status && (
+                            <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-mono font-medium text-[#A6A6A6] bg-[#111111] border border-[#2A2A2A] rounded-full uppercase tracking-wider">
+                              <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                              {project.status}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[#A6A6A6] group-hover:text-white transition-colors flex items-center gap-1 text-sm font-semibold tracking-wider uppercase">
+                          Open Journal <ChevronRight className="w-4 h-4" />
                         </span>
-                      )}
+                      </div>
+                      
+                      <p className="text-base md:text-lg text-[#A6A6A6] leading-relaxed max-w-2xl">
+                        {project.description}
+                      </p>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-4 border-t border-[#2A2A2A] mt-6">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Latest Entry</span>
+                          <span className="text-sm text-white truncate font-mono">
+                            {project.latestJournal ? project.latestJournal.frontmatter.date : "N/A"}
+                          </span>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Entries</span>
+                          <span className="text-sm text-white font-mono">{project.journalCount} Updates</span>
+                        </div>
+                        <div className="flex flex-col gap-1 col-span-2">
+                          <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Progress</span>
+                          <div className="flex items-center gap-3 mt-1">
+                            <div className="h-1.5 flex-1 bg-[#1A1A1A] rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-white rounded-full transition-all duration-1000 ease-out" 
+                                style={{ width: `${project.progress || 0}%` }}
+                              />
+                            </div>
+                            <span className="text-sm text-white font-mono">{project.progress || 0}%</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    
-                    <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
-                      {project.description}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-2 pt-4">
-                      {project.tech.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-3 py-1 text-xs font-mono bg-secondary/50 border border-border text-muted-foreground rounded-full"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </LiveBorderCard>
+                  </LiveBorderCard>
+                </Link>
               </motion.div>
             ))}
           </div>
