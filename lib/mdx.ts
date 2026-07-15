@@ -1,6 +1,7 @@
 import fs from "fs"
 import path from "path"
 import { parse, format } from "date-fns"
+import { marked } from "marked"
 
 const contentDir = path.join(process.cwd(), "content")
 
@@ -17,9 +18,10 @@ export type JournalEntry = {
   formattedDate: string
   readingTime: string
   content: string
+  contentHtml: string
 }
 
-function parseProjectFile(slug: string) {
+async function parseProjectFile(slug: string) {
   const filePath = path.join(contentDir, "projects", `${slug}.md`)
   if (!fs.existsSync(filePath)) return null
 
@@ -47,6 +49,8 @@ function parseProjectFile(slug: string) {
     .replace(/^#\s+.+$/m, "")
     .replace(/^Progress:\s*\d+%/m, "")
     .trim()
+
+  const descriptionHtml = await marked.parse(description)
 
   // Parse Journals
   const journals: JournalEntry[] = []
@@ -84,6 +88,8 @@ function parseProjectFile(slug: string) {
     const wordCount = content.split(/\s+/).length
     const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200))
     const readingTime = `${readingTimeMinutes} min read`
+    
+    const contentHtml = await marked.parse(content)
 
     journals.push({
       slug: `${slug}-entry-${i}`,
@@ -91,7 +97,8 @@ function parseProjectFile(slug: string) {
       date: rawDateString,
       formattedDate: entryDate,
       readingTime,
-      content
+      content,
+      contentHtml
     })
   }
 
@@ -106,18 +113,19 @@ function parseProjectFile(slug: string) {
     overview: {
       frontmatter: { title, description, progress } as ProjectFrontmatter,
       content: description,
+      contentHtml: descriptionHtml,
     },
     journals
   }
 }
 
 export async function getProjectOverview(slug: string) {
-  const data = parseProjectFile(slug)
+  const data = await parseProjectFile(slug)
   return data ? data.overview : null
 }
 
 export async function getProjectJournals(slug: string): Promise<JournalEntry[]> {
-  const data = parseProjectFile(slug)
+  const data = await parseProjectFile(slug)
   return data ? data.journals : []
 }
 

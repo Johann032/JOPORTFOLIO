@@ -2,7 +2,6 @@ import fs from "fs"
 import path from "path"
 import { getProjectOverview, getProjectJournals, getAllJournalDates } from "@/lib/mdx"
 import { notFound } from "next/navigation"
-import { CustomMDX } from "@/components/mdx-remote"
 import { Heatmap } from "@/components/heatmap"
 import { JournalEntryCard } from "@/components/journal-entry"
 
@@ -39,9 +38,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         {/* Overview & Heatmap Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <section className="prose prose-invert max-w-none p-8 bg-[#111111] border border-[#2A2A2A] rounded-xl">
-            <CustomMDX source={overview.content} />
-          </section>
+          <section 
+            className="prose prose-invert max-w-none p-8 bg-[#111111] border border-[#2A2A2A] rounded-xl"
+            dangerouslySetInnerHTML={{ __html: overview.contentHtml }}
+          />
 
           <section className="flex flex-col gap-8">
             <Heatmap dates={dates} />

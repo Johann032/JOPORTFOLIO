@@ -1,8 +1,7 @@
 "use client"
 
-import { JournalEntry } from "@/lib/mdx"
-import { CustomMDX } from "./mdx-remote"
 import { useState } from "react"
+import { JournalEntry } from "@/lib/mdx"
 import { ChevronDown, ChevronUp, Clock, CalendarDays } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -49,11 +48,10 @@ export function JournalEntryCard({ entry }: { entry: JournalEntry }) {
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="pt-4">
-              <div className="prose prose-invert max-w-none">
-                <CustomMDX source={entry.content} />
-              </div>
-            </div>
+            <div 
+              className="prose prose-invert max-w-none pt-6 pb-2"
+              dangerouslySetInnerHTML={{ __html: entry.contentHtml }}
+            />
           </motion.div>
         )}
       </AnimatePresence>
