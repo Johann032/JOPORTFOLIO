@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Shield, Code, Terminal, Lightbulb } from "lucide-react"
+
 
 const skillCategories = [
   {
@@ -28,7 +28,7 @@ const skillCategories = [
 
 export function Skills() {
   return (
-    <section id="skills" className="py-32 md:py-48 px-6 relative overflow-hidden">
+    <section id="skills" className="py-20 md:py-32 lg:py-48 px-4 sm:px-6 relative overflow-hidden">
       <div className="section-divider absolute top-0 left-0 right-0" />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
@@ -36,7 +36,7 @@ export function Skills() {
           <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-100px" }}
             className="lg:col-span-3"
           >
@@ -44,7 +44,7 @@ export function Skills() {
               <span className="text-sm text-muted-foreground tracking-widest uppercase">
                 Skills
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight tracking-tight">
                 What I work with
               </h2>
               <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
@@ -62,13 +62,13 @@ export function Skills() {
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ 
-                    duration: 0.8, 
+                    duration: 0.4, 
                     delay: index * 0.1,
                     ease: [0.16, 1, 0.3, 1] 
                   }}
                   viewport={{ once: true, margin: "-50px" }}
                 >
-                  <div className="group h-full enterprise-card flex flex-col">
+                  <div className="group h-full enterprise-card p-6 sm:p-8 flex flex-col">
 
                     
                     {/* Title & Description */}

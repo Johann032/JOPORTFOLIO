@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { useState } from "react"
-import { Mail, Linkedin, ArrowUpRight } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import { site } from "@/lib/site"
 
 export function Contact() {
@@ -10,7 +10,7 @@ export function Contact() {
 
 
   return (
-    <section id="contact" className="py-32 md:py-48 px-6 relative overflow-hidden">
+    <section id="contact" className="py-20 md:py-32 lg:py-48 px-4 sm:px-6 relative overflow-hidden">
       <div className="section-divider absolute top-0 left-0 right-0" />
       
       <div className="max-w-7xl mx-auto relative z-10">
@@ -18,14 +18,14 @@ export function Contact() {
           <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-100px" }}
             className="lg:col-span-12 text-center flex flex-col items-center"
           >
             <span className="text-sm text-muted-foreground tracking-widest uppercase">
               Contact
             </span>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mt-4 leading-[1.05] tracking-tight">
+            <h2 className="text-4xl min-[400px]:text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mt-4 leading-[1.05] tracking-tight">
               {"Let's"} work
               <br />
               together.
@@ -38,13 +38,15 @@ export function Contact() {
             <div className="mt-12">
               <a 
                 href={`mailto:${site.email}`}
-                className="group flex items-center gap-6 px-8 py-6 rounded-[12px] enterprise-card"
+                className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 p-6 sm:p-8 rounded-[12px] enterprise-card w-full max-w-sm sm:max-w-md"
               >
-                <div className="flex flex-col items-start text-left">
+                <div className="flex flex-col items-start text-left break-all w-full">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">Email Me</span>
-                  <span className="text-lg font-mono text-foreground group-hover:text-accent transition-colors duration-300">{site.email}</span>
+                  <span className="text-base sm:text-lg font-mono text-foreground group-hover:text-accent transition-colors duration-300">{site.email}</span>
                 </div>
-                <ArrowUpRight className="w-5 h-5 ml-4 opacity-40 group-hover:opacity-100 group-hover:text-accent transition-all duration-300" />
+                <div className="self-end sm:self-auto sm:ml-4">
+                  <ArrowUpRight className="w-6 h-6 opacity-40 group-hover:opacity-100 group-hover:text-accent transition-all duration-300" />
+                </div>
               </a>
             </div>
           </motion.div>

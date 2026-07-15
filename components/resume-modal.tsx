@@ -101,7 +101,7 @@ export function ResumeModal({
                 "relative z-10 flex w-full flex-col overflow-hidden",
                 "border border-border bg-card shadow-2xl",
                 "h-[100dvh] sm:h-auto sm:max-w-[560px]",
-                "rounded-none sm:rounded-[14px]"
+                "rounded-none sm:rounded-[12px]"
               )}
               initial={{ opacity: 0, y: 32, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -228,7 +228,7 @@ export function ResumeModal({
                     <button
                       type="button"
                       onClick={() => setOpen(false)}
-                      className="flex-1 btn-premium-secondary"
+                      className="flex-1 btn-premium-secondary min-h-[48px]"
                     >
                       Cancel
                     </button>
@@ -239,8 +239,8 @@ export function ResumeModal({
                       className={cn(
                         "flex-1",
                         hasAgreed
-                          ? "btn-premium-primary"
-                          : "inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-[14px] text-sm font-medium bg-secondary text-muted-foreground border border-border cursor-not-allowed opacity-60"
+                          ? "btn-premium-primary min-h-[48px]"
+                          : "inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-[12px] text-sm font-medium bg-secondary text-muted-foreground border border-border cursor-not-allowed opacity-60 min-h-[48px]"
                       )}
                     >
                       <Download size={16} />

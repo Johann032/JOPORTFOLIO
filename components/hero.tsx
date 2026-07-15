@@ -60,7 +60,8 @@ const ScrambleText = ({ text, delay }: { text: string, delay: number }) => {
 }
 
 export function Hero() {
-  const { isIntroComplete } = useIntro()
+  const { isMounted, isIntroSkipped } = useIntro()
+  const baseDelay = 0
   const containerRef = useRef<HTMLDivElement>(null)
 
   
@@ -99,16 +100,16 @@ export function Hero() {
       onMouseMove={handleMouseMove}
       className="min-h-screen flex items-center justify-center relative overflow-hidden bg-transparent perspective-1000"
     >
-      {isIntroComplete && (
+      {isMounted && (
         <>
           {/* Dynamic Background System */}
           
-          {/* 1. Animated Grid that draws itself in */}
+          {/* 1. Animated Grid that fades in behind the scanner */}
           <motion.div 
-            className="absolute inset-0 pointer-events-none opacity-[0.03]"
-            initial={{ scale: 1.1, opacity: 0 }}
-            animate={{ scale: 1, opacity: 0.03 }}
-            transition={{ duration: 3, ease: premiumEasing }}
+            className="absolute inset-0 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.03 }}
+            transition={{ duration: 2.0, delay: baseDelay, ease: "linear" }}
             style={{
               backgroundImage: `
                 linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px),
@@ -120,9 +121,9 @@ export function Hero() {
             }}
           />
 
-      {/* 2. Interactive Spotlight */}
+      {/* 2. Interactive Spotlight - Hidden on mobile for performance */}
       <motion.div 
-        className="absolute inset-0 pointer-events-none flex items-center justify-center mix-blend-screen"
+        className="hidden md:flex absolute inset-0 pointer-events-none items-center justify-center mix-blend-screen"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 2, delay: 0.5 }}
@@ -138,12 +139,12 @@ export function Hero() {
         />
       </motion.div>
 
-      {/* 3. System boot shockwave effect */}
+      {/* 3. System boot shockwave effect - Hidden on mobile */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[2px] bg-accent blur-[2px] pointer-events-none"
+        className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[2px] bg-accent blur-[2px] pointer-events-none"
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: [0, 1, 0], opacity: [0, 0.8, 0] }}
-        transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
+        transition={{ duration: 0.5, delay: 0.1, ease: premiumEasing }}
       />
 
       <motion.div 
@@ -153,18 +154,18 @@ export function Hero() {
         {/* Name with Scramble Decrypt Effect */}
         <div className="mb-12 h-6 flex items-center justify-center">
           <span className="text-sm md:text-base font-bold tracking-[0.3em] uppercase">
-            <ScrambleText text="JOHANN CHERIAN AJISH" delay={1.2} />
+            <ScrambleText text="JOHANN CHERIAN AJISH" delay={0.1} />
           </span>
         </div>
 
         {/* Heading with 3D Flip Reveal */}
-        <div className="relative text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold text-white tracking-tighter leading-[1.05] mb-12 flex flex-col items-center" style={{ perspective: "1000px" }}>
+        <div className="relative text-4xl min-[400px]:text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold text-white tracking-tighter leading-[1.05] mb-12 flex flex-col items-center" style={{ perspective: "1000px" }}>
           
           <div className="overflow-hidden py-2" style={{ transformStyle: "preserve-3d" }}>
             <motion.div 
-              initial={{ opacity: 0, rotateX: -90, y: 40 }}
+              initial={{ opacity: 0, rotateX: -90, y: 20 }}
               animate={{ opacity: 1, rotateX: 0, y: 0 }}
-              transition={{ duration: 1, delay: 2.2, ease: [0.23, 1, 0.32, 1] }}
+              transition={{ duration: 0.4, delay: 0.2, ease: premiumEasing }}
               style={{ transformOrigin: "top" }}
               className="drop-shadow-lg"
             >
@@ -174,9 +175,9 @@ export function Hero() {
           
           <div className="overflow-hidden py-2" style={{ transformStyle: "preserve-3d" }}>
             <motion.div 
-              initial={{ opacity: 0, rotateX: -90, y: 40 }}
+              initial={{ opacity: 0, rotateX: -90, y: 20 }}
               animate={{ opacity: 1, rotateX: 0, y: 0 }}
-              transition={{ duration: 1, delay: 2.4, ease: [0.23, 1, 0.32, 1] }}
+              transition={{ duration: 0.4, delay: 0.3, ease: premiumEasing }}
               style={{ transformOrigin: "top" }}
               className="drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/70"
             >
@@ -188,7 +189,7 @@ export function Hero() {
           <motion.div
             initial={{ y: "-200%", opacity: 0 }}
             animate={{ y: "300%", opacity: [0, 0.15, 0] }}
-            transition={{ duration: 1.2, delay: 3.5, ease: "linear" }}
+            transition={{ duration: 1.2, delay: 2.5, ease: "linear" }}
             className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-b from-transparent via-accent to-transparent w-full h-[40%]"
           />
         </div>
@@ -197,7 +198,7 @@ export function Hero() {
         <motion.p
           initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-          transition={{ duration: 1, delay: 3.0, ease: premiumEasing }}
+          transition={{ duration: 0.4, delay: 0.4, ease: premiumEasing }}
           className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-loose text-pretty mb-16 font-medium"
         >
           Computer Science student focused on cybersecurity, AI, and defensive engineering.
@@ -205,10 +206,10 @@ export function Hero() {
 
         {/* Buttons with subtle entry */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={{ opacity: 0, scale: 0.98, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 3.6, ease: premiumEasing }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+          transition={{ duration: 0.35, delay: 0.5, ease: premiumEasing }}
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 w-full sm:w-auto px-4 sm:px-0"
         >
           <a
             href="#projects"
@@ -216,7 +217,7 @@ export function Hero() {
               e.preventDefault()
               scrollToSection("#projects")
             }}
-            className="relative group overflow-hidden btn-premium-primary border border-accent/20 bg-card hover:border-accent hover:shadow-[0_0_20px_rgba(110,231,255,0.2)] transition-all duration-500"
+            className="relative group overflow-hidden btn-premium-primary border border-accent/20 bg-card hover:border-accent hover:shadow-[0_0_20px_rgba(110,231,255,0.2)] transition-all duration-300 min-h-[48px] w-full sm:w-auto"
           >
             <span className="relative z-10">View Projects</span>
             {/* Button internal flare */}
@@ -227,7 +228,9 @@ export function Hero() {
               transition={{ duration: 0.7, ease: "easeInOut" }}
             />
           </a>
-          <ResumeModal variant="secondary" />
+          <div className="w-full sm:w-auto flex flex-col">
+            <ResumeModal variant="secondary" triggerClassName="min-h-[48px] w-full" />
+          </div>
         </motion.div>
       </motion.div>
         </>

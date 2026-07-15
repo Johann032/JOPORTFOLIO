@@ -40,7 +40,7 @@ export function Journey() {
   const lineHeight = useTransform(scrollYProgress, [0, 0.8], ["0%", "100%"])
 
   return (
-    <section id="journey" className="py-32 md:py-48 px-6 relative overflow-hidden">
+    <section id="journey" className="py-20 md:py-32 lg:py-48 px-4 sm:px-6 relative overflow-hidden">
       <div className="section-divider absolute top-0 left-0 right-0" />
       
       <div className="max-w-7xl mx-auto relative z-10" ref={containerRef}>
@@ -49,7 +49,7 @@ export function Journey() {
           <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-100px" }}
             className="lg:col-span-3"
           >
@@ -57,7 +57,7 @@ export function Journey() {
               <span className="text-sm text-muted-foreground tracking-widest uppercase">
                 Journey
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight tracking-tight">
                 My path so far
               </h2>
               <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
@@ -78,22 +78,22 @@ export function Journey() {
               </div>
 
               {/* Timeline items */}
-              <div className="space-y-16 pl-12">
+              <div className="space-y-12 sm:space-y-16 pl-8 sm:pl-12">
                 {journeyItems.map((item, index) => (
                   <motion.div
                     key={item.year}
                     initial={{ opacity: 0, x: 40 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ 
-                      duration: 0.8, 
-                      delay: index * 0.15,
+                      duration: 0.4, 
+                      delay: index * 0.1,
                       ease: [0.16, 1, 0.3, 1] 
                     }}
                     viewport={{ once: true, margin: "-100px" }}
                     className="relative"
                   >
                     {/* Timeline dot */}
-                    <div className={`absolute -left-12 top-0 w-3 h-3 rounded-full border-2 ${
+                    <div className={`absolute -left-8 sm:-left-12 top-0 w-3 h-3 rounded-full border-2 ${
                       item.highlight 
                         ? "bg-accent border-accent shadow-[0_0_10px_rgba(125,211,252,0.5)]" 
                         : "bg-background border-border"
@@ -114,7 +114,7 @@ export function Journey() {
                           {item.year}
                         </span>
                       </div>
-                      <h3 className="text-2xl font-semibold text-foreground mb-3">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-2 sm:mb-3">
                         {item.title}
                       </h3>
                       <p className="text-muted-foreground leading-relaxed max-w-lg">

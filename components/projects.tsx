@@ -13,7 +13,7 @@ const projectsList = [
 
 export function Projects() {
   return (
-    <section id="projects" className="py-32 md:py-48 px-6 relative overflow-hidden">
+    <section id="projects" className="py-20 md:py-32 lg:py-48 px-4 sm:px-6 relative overflow-hidden">
       <div className="section-divider absolute top-0 left-0 right-0" />
       
       <div className="max-w-7xl mx-auto">
@@ -22,7 +22,7 @@ export function Projects() {
           <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-100px" }}
             className="lg:col-span-3"
           >
@@ -30,7 +30,7 @@ export function Projects() {
               <span className="text-sm font-mono text-accent tracking-widest uppercase">
                 Projects
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight tracking-tight">
                 Selected Work
               </h2>
             </div>
@@ -44,20 +44,20 @@ export function Projects() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ 
-                  duration: 0.8, 
+                  duration: 0.4, 
                   delay: index * 0.1,
                   ease: [0.16, 1, 0.3, 1] 
                 }}
                 viewport={{ once: true, margin: "-50px" }}
               >
-                <div className="group enterprise-card p-8 md:p-12 flex flex-col md:flex-row gap-8 md:gap-12 items-start transition-all duration-500">
-                  <div className="flex-1 space-y-6">
-                    <div className="flex flex-wrap items-center gap-4">
-                      <h3 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight group-hover:text-accent transition-colors duration-300">
+                <div className="group enterprise-card p-6 sm:p-8 lg:p-12 flex flex-col gap-6 sm:gap-8 items-start transition-all duration-300 w-full">
+                  <div className="w-full space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight group-hover:text-accent transition-colors duration-300">
                         {project.title}
                       </h3>
                       {project.status && (
-                        <span className="px-3 py-1 text-xs font-mono font-medium text-warning bg-warning/10 border border-warning/20 rounded-full uppercase tracking-wider">
+                        <span className="inline-flex w-fit px-3 py-1 text-xs font-mono font-medium text-warning bg-warning/10 border border-warning/20 rounded-full uppercase tracking-wider">
                           {project.status}
                         </span>
                       )}

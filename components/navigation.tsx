@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
 import { ResumeModal } from "@/components/resume-modal"
 import { site } from "@/lib/site"
 import { scrollToSection } from "@/lib/scroll"
@@ -18,7 +17,7 @@ const navItems = [
 ]
 
 export function Navigation() {
-  const { isIntroComplete } = useIntro()
+  const { isIntroComplete, isMounted, isIntroSkipped } = useIntro()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("")
@@ -41,144 +40,204 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+    return () => { document.body.style.overflow = "unset" }
+  }, [isMobileMenuOpen])
+
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
     e.preventDefault()
-    scrollToSection(href)
     setIsMobileMenuOpen(false)
+    setTimeout(() => {
+      scrollToSection(href)
+    }, 300) // wait for menu animation
   }
 
   const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
-    window.scrollTo({ top: 0, behavior: "smooth" })
     setIsMobileMenuOpen(false)
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }, 300)
   }
 
   return (
-    <motion.header
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isIntroComplete ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isIntroComplete ? "pointer-events-auto" : "pointer-events-none"
-      } ${
-        isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm"
-          : isIntroComplete ? "bg-transparent" : ""
-      }`}
-    >
-      <nav className="max-w-7xl mx-auto px-6 lg:px-8 py-5 flex items-center justify-between">
-        <Link 
-          href="/"
-          onClick={scrollToTop}
-          className="hover:opacity-70 transition-opacity duration-300 flex items-center"
-        >
-          {isIntroComplete && (
-            <motion.div
-              layoutId="brand-logo"
-              className="text-xl font-bold text-foreground tracking-[0.2em] uppercase"
-            >
-              CH3R14N
-            </motion.div>
-          )}
-        </Link>
-
-        {/* Desktop Navigation */}
-        <ul className="hidden lg:flex items-center gap-8 xl:gap-10">
-          {navItems.map((item) => (
-            <li key={item.name}>
-              <Link
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                className={`text-sm transition-all duration-300 relative font-medium ${
-                  activeSection === item.href.slice(1)
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-accent"
-                }`}
+    <>
+      <motion.header
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isMounted ? 1 : 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 left-0 right-0 z-[60] transition-colors duration-500 pt-[env(safe-area-inset-top)] pointer-events-auto ${
+          isScrolled && !isMobileMenuOpen
+            ? "bg-background/80 backdrop-blur-md border-b border-border shadow-sm"
+            : "bg-transparent"
+        }`}
+      >
+        <nav className="max-w-7xl mx-auto px-6 lg:px-8 py-5 flex items-center justify-between">
+          <Link 
+            href="/"
+            onClick={scrollToTop}
+            className="hover:opacity-70 transition-opacity duration-300 flex items-center relative z-[70]"
+          >
+            {isMounted && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, ease: "linear" }}
+                className="text-xl font-bold text-foreground tracking-[0.2em] uppercase"
               >
-                {item.name}
-                {activeSection === item.href.slice(1) && (
-                  <motion.div
-                    layoutId="activeSection"
-                    className="absolute -bottom-1 left-0 right-0 h-px bg-foreground"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </Link>
-            </li>
-          ))}
-          <li>
-            <ResumeModal variant="ghost" label="Resume" triggerClassName="!px-4 !py-2 text-sm" />
-          </li>
-        </ul>
+                CH3RI4N
+              </motion.div>
+            )}
+          </Link>
 
-        {/* Tablet: resume + menu */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="hidden md:flex lg:hidden items-center gap-3"
-        >
-          <ResumeModal variant="ghost" label="Resume" triggerClassName="!px-4 !py-2 text-sm" />
+          {/* Desktop Navigation */}
+          <ul className="hidden lg:flex items-center gap-8 xl:gap-10">
+            {navItems.map((item, index) => (
+              <motion.li 
+                key={item.name}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 * index, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Link
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className={`text-sm transition-all duration-300 relative font-medium ${
+                    activeSection === item.href.slice(1)
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-accent"
+                  }`}
+                >
+                  {item.name}
+                  {activeSection === item.href.slice(1) && (
+                    <motion.div
+                      layoutId="activeSection"
+                      className="absolute -bottom-1 left-0 right-0 h-px bg-foreground"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              </motion.li>
+            ))}
+            <motion.li
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <ResumeModal variant="ghost" label="Resume" triggerClassName="!px-4 !py-2 text-sm" />
+            </motion.li>
+          </ul>
+
+          {/* Tablet: resume + menu */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="hidden md:flex lg:hidden items-center gap-3 relative z-[70]"
+          >
+            <ResumeModal variant="ghost" label="Resume" triggerClassName="!px-4 !py-2 text-sm" />
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-foreground p-3 -mr-3 relative w-12 h-12 flex flex-col justify-center items-center gap-1.5 focus:outline-none"
+              aria-label="Toggle menu"
+            >
+              <motion.span 
+                animate={isMobileMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                className="w-6 h-[2px] bg-foreground block transition-all"
+              />
+              <motion.span 
+                animate={isMobileMenuOpen ? { opacity: 0, x: 10 } : { opacity: 1, x: 0 }}
+                className="w-6 h-[2px] bg-foreground block transition-all"
+              />
+              <motion.span 
+                animate={isMobileMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                className="w-6 h-[2px] bg-foreground block transition-all"
+              />
+            </button>
+          </motion.div>
+
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-foreground p-2 -mr-2"
+            className="md:hidden text-foreground p-3 -mr-3 relative w-12 h-12 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[70]"
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            <motion.span 
+              animate={isMobileMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+              className="w-6 h-[2px] bg-foreground block transition-all"
+            />
+            <motion.span 
+              animate={isMobileMenuOpen ? { opacity: 0, x: 10 } : { opacity: 1, x: 0 }}
+              className="w-6 h-[2px] bg-foreground block transition-all"
+            />
+            <motion.span 
+              animate={isMobileMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+              className="w-6 h-[2px] bg-foreground block transition-all"
+            />
           </button>
-        </motion.div>
+        </nav>
+      </motion.header>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden text-foreground p-2 -mr-2"
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </nav>
-
-      {/* Mobile Navigation */}
+      {/* Fullscreen Mobile Navigation Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden bg-background/95 backdrop-blur-md border-b border-border overflow-hidden"
+            className="fixed inset-0 z-[55] bg-background/98 backdrop-blur-xl flex flex-col items-center justify-center lg:hidden"
+            style={{ 
+              paddingTop: "env(safe-area-inset-top)",
+              paddingBottom: "env(safe-area-inset-bottom)"
+            }}
           >
-            <ul className="flex flex-col px-6 py-8 gap-6">
+            <nav className="flex flex-col items-center gap-8 w-full px-6">
               {navItems.map((item, index) => (
-                <motion.li 
+                <motion.div 
                   key={item.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20, transition: { delay: 0 } }}
+                  transition={{ delay: index * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden"
                 >
                   <Link
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className="text-2xl font-light text-foreground hover:text-accent transition-colors duration-300"
+                    className="text-4xl sm:text-5xl font-light text-foreground hover:text-accent transition-colors duration-300 tracking-tight block"
                   >
                     {item.name}
                   </Link>
-                </motion.li>
+                </motion.div>
               ))}
-              <motion.li
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navItems.length * 0.05 }}
+              
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20, transition: { delay: 0 } }}
+                transition={{ delay: navItems.length * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-4"
               >
-                <ResumeModal variant="ghost" label="Resume" triggerClassName="text-2xl font-light !px-0 !py-0 hover:bg-transparent" />
-              </motion.li>
-            </ul>
+                <ResumeModal 
+                  variant="ghost" 
+                  label="Resume" 
+                  triggerClassName="text-4xl sm:text-5xl font-light text-foreground hover:text-accent tracking-tight !px-0 !py-0 hover:bg-transparent min-h-[48px]" 
+                />
+              </motion.div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   )
 }

@@ -13,7 +13,7 @@ export function About() {
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
 
   return (
-    <section id="about" className="py-32 md:py-48 px-6 relative overflow-hidden">
+    <section id="about" className="py-20 md:py-32 lg:py-48 px-4 sm:px-6 relative overflow-hidden">
       {/* Background accent */}
       <div className="section-divider absolute top-0 left-0 right-0" />
       
@@ -23,7 +23,7 @@ export function About() {
           <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-100px" }}
             className="lg:col-span-3"
           >
@@ -39,10 +39,10 @@ export function About() {
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true, margin: "-100px" }}
             >
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.05] tracking-tight text-balance mb-16">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.1] tracking-tight text-balance mb-10 sm:mb-16">
                 Building the future,
                 <br />
                 <span className="text-muted-foreground">one line at a time.</span>
@@ -53,7 +53,7 @@ export function About() {
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 viewport={{ once: true, margin: "-100px" }}
                 className="space-y-6"
               >
@@ -71,7 +71,7 @@ export function About() {
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 viewport={{ once: true, margin: "-100px" }}
                 className="space-y-6"
               >
@@ -92,26 +92,25 @@ export function About() {
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true, margin: "-100px" }}
               style={{ y }}
               className="pt-12 border-t border-border/50"
             >
-              <div className="grid grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-6 md:gap-8">
                 {[
-                  { label: "Certifications", value: "4+" },
-                  { label: "Projects Built", value: "10+" },
+                  { label: "Projects Built", value: "5" },
                   { label: "Years Learning", value: "3+" },
                 ].map((stat, index) => (
                   <motion.div 
                     key={stat.label}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                    transition={{ duration: 0.4, delay: 0.3 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
                     viewport={{ once: true }}
                     className="text-center md:text-left"
                   >
-                    <div className="text-4xl md:text-5xl font-bold text-foreground mb-3 tracking-tight">
+                    <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-2 sm:mb-3 tracking-tight">
                       {stat.value}
                     </div>
                     <div className="text-sm text-muted-foreground">
