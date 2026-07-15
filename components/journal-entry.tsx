@@ -2,12 +2,11 @@
 
 import { JournalEntry } from "@/lib/mdx"
 import { CustomMDX } from "./mdx-remote"
-import { BuildSnapshot } from "./build-snapshot"
 import { useState } from "react"
-import { ChevronDown, ChevronUp } from "lucide-react"
+import { ChevronDown, ChevronUp, Clock, CalendarDays } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
-export function JournalEntryCard({ entry, projectSlug }: { entry: JournalEntry; projectSlug: string }) {
+export function JournalEntryCard({ entry }: { entry: JournalEntry }) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
@@ -15,14 +14,23 @@ export function JournalEntryCard({ entry, projectSlug }: { entry: JournalEntry; 
       {/* Timeline Node */}
       <div className="absolute left-[-5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#030303]" />
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
-        <div>
-          <span className="text-sm font-mono text-[#A6A6A6]">{entry.frontmatter.date}</span>
-          <h2 className="text-xl font-bold text-white tracking-tight mt-1">{entry.frontmatter.title}</h2>
+      <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-4 text-xs font-mono text-[#A6A6A6]">
+            <span className="flex items-center gap-1.5 bg-[#111111] px-2 py-1 rounded border border-[#2A2A2A]">
+              <CalendarDays className="w-3.5 h-3.5" />
+              {entry.formattedDate}
+            </span>
+            <span className="flex items-center gap-1.5 bg-[#111111] px-2 py-1 rounded border border-[#2A2A2A]">
+              <Clock className="w-3.5 h-3.5" />
+              {entry.readingTime}
+            </span>
+          </div>
+          <h2 className="text-2xl font-bold text-white tracking-tight leading-tight">{entry.title}</h2>
         </div>
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 text-sm text-[#E5E5E5] hover:text-white transition-colors bg-[#111111] border border-[#2A2A2A] px-4 py-2 rounded-lg self-start"
+          className="flex items-center gap-2 text-sm text-[#E5E5E5] hover:text-white transition-colors bg-[#111111] border border-[#2A2A2A] px-4 py-2 rounded-lg self-start whitespace-nowrap"
         >
           {isExpanded ? (
             <>Close Entry <ChevronUp className="w-4 h-4" /></>
@@ -41,11 +49,9 @@ export function JournalEntryCard({ entry, projectSlug }: { entry: JournalEntry; 
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="pt-6">
-              <BuildSnapshot frontmatter={entry.frontmatter} />
-              
+            <div className="pt-4">
               <div className="prose prose-invert max-w-none">
-                <CustomMDX source={entry.content} folder={entry.folder} projectSlug={projectSlug} />
+                <CustomMDX source={entry.content} />
               </div>
             </div>
           </motion.div>

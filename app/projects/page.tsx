@@ -55,8 +55,8 @@ export default async function ProjectsPage() {
                   {project.latestJournal ? (
                     <div className="flex flex-col gap-1">
                       <span className="text-xs font-semibold uppercase tracking-wider text-[#E5E5E5]">Latest Entry</span>
-                      <span className="text-sm text-[#A6A6A6] truncate">{project.latestJournal.frontmatter.title}</span>
-                      <span className="text-xs text-[#555555] font-mono mt-1">{project.latestJournal.frontmatter.date}</span>
+                      <span className="text-sm text-[#A6A6A6] truncate">{project.latestJournal.title}</span>
+                      <span className="text-xs text-[#555555] font-mono mt-1">{project.latestJournal.formattedDate}</span>
                     </div>
                   ) : (
                     <span className="text-sm text-[#555555] italic">No journal entries yet.</span>
