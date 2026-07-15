@@ -1,47 +1,38 @@
 ---
-title: "Dashboard Foundation & Component Architecture"
-date: "2026-07-15"
-version: "v0.1.4"
-progress: 15
-status: "In Progress"
-timeSpent: "4h 30m"
-tags: ["Next.js", "TailwindCSS", "Framer Motion"]
+title: EntryExpress Integration
+date: 2026-07-15
+progress: 12
+tags:
+  - Next.js
+  - Authentication
+  - API
 ---
 
-Today I focused on laying out the core dashboard foundation. The primary challenge was establishing a component architecture that feels premium, highly responsive, and avoids standard "admin template" aesthetics.
+# EntryExpress Integration
 
-### Progress
-- Established the `LiveBorderCard` component for dynamic metrics.
-- Setup the core layout grid using CSS Grid and subgrid for perfect alignment.
-- Implemented the `Heatmap` component for tracking metrics.
+Today I integrated EntryExpress into SentryXAI and began connecting the authentication flow with the backend.
 
-### Challenges
-The SVG rendering for the animated borders caused significant issues with velocity consistency at the corners. WebKit normalizes `pathLength` unevenly.
+## What I completed
 
-### Solutions
-I pivoted the architecture to a **GPU-accelerated Linear Mask Sweep**. By using a rotating CSS mask over a solid DOM border, I achieved mathematical perfection without relying on JavaScript or SVG parsing.
+- Connected the EntryExpress API
+- Implemented the initial authentication flow
+- Verified request and response handling
+- Began integrating the dashboard after successful login
 
-### Next Goal
-Implement the authentication middleware and connect the real-time websocket stream to the frontend cards.
+## Challenges
 
-```typescript
-export function LiveBorderCard({ children, className }: LiveBorderCardProps) {
-  return (
-    <div className={cn("group relative bg-[#111111] rounded-[12px]", className)}>
-      <div className="absolute inset-0 rounded-[12px] border border-[#2A2A2A]" />
-      <div className="absolute inset-0 rounded-[12px] border border-white animate-mask-sweep pointer-events-none" />
-      <div className="relative z-10 h-full">
-        {children}
-      </div>
-    </div>
-  )
-}
-```
+Authentication cookies were not being sent correctly due to cross-origin cookie settings.
 
-```mermaid
-graph TD;
-    A[Client] -->|WebSocket| B(API Gateway);
-    B --> C{Load Balancer};
-    C -->|gRPC| D[Auth Service];
-    C -->|gRPC| E[Metrics Service];
-```
+## Solution
+
+Updated the cookie configuration and verified the authentication flow worked correctly across the frontend and backend.
+
+## What's Next
+
+- Complete the dashboard UI
+- Add user session management
+- Start building role-based access
+
+## Screenshot
+
+![Dashboard](./dashboard.png)
