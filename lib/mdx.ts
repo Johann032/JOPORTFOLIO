@@ -145,7 +145,7 @@ export async function getProjects() {
   const projects = []
   for (const filename of files) {
     const slug = filename.replace('.md', '')
-    const data = parseProjectFile(slug)
+    const data = await parseProjectFile(slug)
     if (data && data.overview) {
       projects.push({
         slug,
