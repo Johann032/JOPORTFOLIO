@@ -35,18 +35,17 @@ export function Projects({ projects }: { projects: any[] }) {
           {/* Right column - Vertical List */}
           <div className="lg:col-span-9 space-y-8">
             {projects.map((project, index) => (
-              <motion.div
-                key={project.slug}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.4, 
-                  delay: index * 0.1,
-                  ease: [0.16, 1, 0.3, 1] 
-                }}
-                viewport={{ once: true, margin: "-50px" }}
-              >
-                <Link href={`/projects/${project.slug}`} className="block">
+              <Link href={`/projects/${project.slug}`} key={project.slug} className="block w-full cursor-pointer z-50 relative">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    duration: 0.4, 
+                    delay: index * 0.1,
+                    ease: [0.16, 1, 0.3, 1] 
+                  }}
+                  viewport={{ once: true, margin: "-50px" }}
+                >
                   <LiveBorderCard className="p-6 sm:p-8 lg:p-12 flex flex-col gap-6 sm:gap-8 items-start w-full transition-transform hover:-translate-y-1">
                     <div className="w-full space-y-6 relative z-10">
                       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 border-b border-[#2A2A2A] pb-6">
@@ -102,8 +101,8 @@ export function Projects({ projects }: { projects: any[] }) {
                       </div>
                     </div>
                   </LiveBorderCard>
-                </Link>
-              </motion.div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>
