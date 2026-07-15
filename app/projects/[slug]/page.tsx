@@ -2,7 +2,6 @@ import fs from "fs"
 import path from "path"
 import { getProjectOverview, getProjectJournals, getAllJournalDates } from "@/lib/mdx"
 import { notFound } from "next/navigation"
-import { Heatmap } from "@/components/heatmap"
 import { JournalEntryCard } from "@/components/journal-entry"
 
 export async function generateStaticParams() {
@@ -36,7 +35,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <p className="text-xl text-[#A6A6A6]">{overview.frontmatter.description}</p>
         </header>
 
-        {/* Overview & Heatmap Grid */}
+        {/* Overview & Statistics Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <section 
             className="prose prose-invert max-w-none p-8 bg-[#111111] border border-[#2A2A2A] rounded-xl"
@@ -44,7 +43,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           />
 
           <section className="flex flex-col gap-8">
-            <Heatmap dates={dates} />
             <div className="p-6 bg-[#080808] border border-[#2A2A2A] rounded-xl flex flex-col gap-4">
               <h3 className="text-sm font-semibold tracking-wider text-[#A6A6A6] uppercase">Project Statistics</h3>
               <div className="grid grid-cols-2 gap-4">
