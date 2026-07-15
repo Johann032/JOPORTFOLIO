@@ -53,7 +53,7 @@ const ScrambleText = ({ text, delay }: { text: string, delay: number }) => {
   if (!hasStarted) return <span className="opacity-0">{text}</span>
 
   return (
-    <span className={isScrambling ? "text-accent font-mono" : "text-white transition-colors duration-500"}>
+    <span className={isScrambling ? "text-white font-mono" : "text-white transition-colors duration-500"}>
       {displayText}
     </span>
   )
@@ -133,19 +133,11 @@ export function Hero() {
           style={{
             x: spotlightX,
             y: spotlightY,
-            background: "radial-gradient(circle at center, rgba(110, 231, 255, 0.04) 0%, transparent 50%)",
+            background: "radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 50%)",
             filter: "blur(60px)"
           }}
         />
       </motion.div>
-
-      {/* 3. System boot shockwave effect - Hidden on mobile */}
-      <motion.div
-        className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[2px] bg-accent blur-[2px] pointer-events-none"
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={{ scaleX: [0, 1, 0], opacity: [0, 0.8, 0] }}
-        transition={{ duration: 0.5, delay: 0.1, ease: premiumEasing }}
-      />
 
       <motion.div 
         style={{ y, opacity }}
@@ -167,7 +159,7 @@ export function Hero() {
               animate={{ opacity: 1, rotateX: 0, y: 0 }}
               transition={{ duration: 0.4, delay: 0.2, ease: premiumEasing }}
               style={{ transformOrigin: "top" }}
-              className="drop-shadow-lg"
+              className="text-white"
             >
               Building secure systems
             </motion.div>
@@ -179,19 +171,11 @@ export function Hero() {
               animate={{ opacity: 1, rotateX: 0, y: 0 }}
               transition={{ duration: 0.4, delay: 0.3, ease: premiumEasing }}
               style={{ transformOrigin: "top" }}
-              className="drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/70"
+              className="text-muted-foreground"
             >
               with intelligence.
             </motion.div>
           </div>
-
-          {/* High-tech scanner sweep over the text */}
-          <motion.div
-            initial={{ y: "-200%", opacity: 0 }}
-            animate={{ y: "300%", opacity: [0, 0.15, 0] }}
-            transition={{ duration: 1.2, delay: 2.5, ease: "linear" }}
-            className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-b from-transparent via-accent to-transparent w-full h-[40%]"
-          />
         </div>
 
         {/* Description */}
@@ -217,15 +201,15 @@ export function Hero() {
               e.preventDefault()
               scrollToSection("#projects")
             }}
-            className="relative group overflow-hidden btn-premium-primary border border-accent/20 bg-card hover:border-accent hover:shadow-[0_0_20px_rgba(110,231,255,0.2)] transition-all duration-300 min-h-[48px] w-full sm:w-auto"
+            className="relative group overflow-hidden btn-premium-primary min-h-[48px] w-full sm:w-auto"
           >
             <span className="relative z-10">View Projects</span>
-            {/* Button internal flare */}
+            {/* Minimal metallic sheen */}
             <motion.div 
-              className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-accent/20 to-transparent skew-x-[-20deg]"
+              className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-20deg]"
               initial={{ left: "-100%" }}
               whileHover={{ left: "200%" }}
-              transition={{ duration: 0.7, ease: "easeInOut" }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             />
           </a>
           <div className="w-full sm:w-auto flex flex-col">

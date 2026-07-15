@@ -35,7 +35,7 @@ export function Footer() {
             
             <button
               onClick={scrollToTop}
-              className="group w-14 h-14 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:border-accent/40 hover:text-accent transition-all duration-300 hover:-translate-y-1"
+              className="group w-14 h-14 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:border-white/20 hover:text-white transition-all duration-300 hover:-translate-y-1"
               aria-label="Scroll to top"
             >
               <ArrowUp className="w-5 h-5" />
@@ -51,7 +51,7 @@ export function Footer() {
             <div className="flex items-center gap-4">
               <a
                 href={`mailto:${site.email}`}
-                className="w-12 h-12 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:border-accent/40 hover:text-accent transition-all duration-300 hover:-translate-y-0.5"
+                className="w-12 h-12 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:border-white/20 hover:text-white transition-all duration-300 hover:-translate-y-0.5"
                 aria-label="Email"
               >
                 <Mail size={16} />

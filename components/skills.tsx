@@ -68,10 +68,17 @@ export function Skills() {
                   }}
                   viewport={{ once: true, margin: "-50px" }}
                 >
-                  <div className="group h-full enterprise-card p-6 sm:p-8 flex flex-col">
-
+                  <div className="group relative overflow-hidden h-full enterprise-card p-6 sm:p-8 flex flex-col">
+                    {/* Metallic Sheen */}
+                    <motion.div 
+                      className="absolute top-0 left-[-100%] w-[100%] h-full bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-20deg] pointer-events-none"
+                      initial={{ left: "-100%" }}
+                      whileHover={{ left: "200%" }}
+                      transition={{ duration: 0.5, ease: "easeInOut" }}
+                    />
                     
-                    {/* Title & Description */}
+                    <div className="relative z-10 flex flex-col h-full">
+                      {/* Title & Description */}
                     <h3 className="text-xl font-semibold text-foreground mb-2">
                       {category.title}
                     </h3>
@@ -84,11 +91,12 @@ export function Skills() {
                       {category.skills.map((skill) => (
                         <span
                           key={skill}
-                          className="px-3 py-1.5 text-xs font-mono bg-secondary border border-border text-muted-foreground rounded-full hover:border-accent/40 hover:text-foreground transition-colors duration-300"
+                          className="px-3 py-1.5 text-xs font-mono bg-secondary border border-border text-muted-foreground rounded-full hover:border-white/20 hover:text-white transition-colors duration-300"
                         >
                           {skill}
                         </span>
                       ))}
+                    </div>
                     </div>
                   </div>
                 </motion.div>

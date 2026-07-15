@@ -140,7 +140,7 @@ export function ResumeModal({
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-accent/10 hover:text-accent transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] border border-border"
+                    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-white/10 hover:text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] border border-border"
                     aria-label="Close"
                   >
                     <X size={18} />
@@ -200,11 +200,11 @@ export function ResumeModal({
                             checked={hasAgreed}
                             onChange={(e) => setHasAgreed(e.target.checked)}
                           />
-                          <div className="w-5 h-5 rounded border-2 border-muted-foreground/40 peer-checked:border-accent peer-checked:bg-accent flex items-center justify-center transition-all duration-200">
+                          <div className="w-5 h-5 rounded border-2 border-muted-foreground/40 peer-checked:border-white peer-checked:bg-white flex items-center justify-center transition-all duration-200">
                             <motion.svg 
                               initial={false}
                               animate={{ opacity: hasAgreed ? 1 : 0, scale: hasAgreed ? 1 : 0.5 }}
-                              className="w-3.5 h-3.5 text-background" 
+                              className="w-3.5 h-3.5 text-black" 
                               viewBox="0 0 24 24" 
                               fill="none" 
                               stroke="currentColor" 

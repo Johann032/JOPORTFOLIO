@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { LiveBorderCard } from "@/components/ui/live-border-card"
 
 const projectsList = [
   {
@@ -27,7 +28,7 @@ export function Projects() {
             className="lg:col-span-3"
           >
             <div className="lg:sticky lg:top-32">
-              <span className="text-sm font-mono text-accent tracking-widest uppercase">
+              <span className="text-sm font-mono text-muted-foreground tracking-widest uppercase">
                 Projects
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight tracking-tight">
@@ -50,14 +51,15 @@ export function Projects() {
                 }}
                 viewport={{ once: true, margin: "-50px" }}
               >
-                <div className="group enterprise-card p-6 sm:p-8 lg:p-12 flex flex-col gap-6 sm:gap-8 items-start transition-all duration-300 w-full">
-                  <div className="w-full space-y-6">
+                <LiveBorderCard className="p-6 sm:p-8 lg:p-12 flex flex-col gap-6 sm:gap-8 items-start w-full">
+                  <div className="w-full space-y-6 relative z-10">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight group-hover:text-accent transition-colors duration-300">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight group-hover:text-white transition-colors duration-300">
                         {project.title}
                       </h3>
                       {project.status && (
-                        <span className="inline-flex w-fit px-3 py-1 text-xs font-mono font-medium text-warning bg-warning/10 border border-warning/20 rounded-full uppercase tracking-wider">
+                        <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-mono font-medium text-muted-foreground bg-secondary/30 border border-border rounded-full uppercase tracking-wider">
+                          <span className="w-1.5 h-1.5 rounded-full bg-white" />
                           {project.status}
                         </span>
                       )}
@@ -78,7 +80,7 @@ export function Projects() {
                       ))}
                     </div>
                   </div>
-                </div>
+                </LiveBorderCard>
               </motion.div>
             ))}
           </div>

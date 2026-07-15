@@ -4,29 +4,29 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* V3 Premium Enterprise Cybersecurity Color System */
+  /* Ultra-Premium Black & Platinum Design System */
   --background: #030303;
   --foreground: #FFFFFF;
-  --card: #0D1117;
+  --card: #111111;
   --card-foreground: #FFFFFF;
-  --popover: #0D1117;
+  --popover: #111111;
   --popover-foreground: #FFFFFF;
   --primary: #FFFFFF;
   --primary-foreground: #030303;
-  --secondary: #080B10;
-  --secondary-foreground: #D6E4F0;
-  --muted: #080B10;
-  --muted-foreground: #9FB2C6;
-  --accent: #6EE7FF;
+  --secondary: #080808;
+  --secondary-foreground: #D9D9D9;
+  --muted: #080808;
+  --muted-foreground: #A6A6A6;
+  --accent: #E5E5E5;
   --accent-foreground: #030303;
-  --accent-hover: #A5F3FC;
+  --accent-hover: #FFFFFF;
   --destructive: #ef4444;
   --destructive-foreground: #FFFFFF;
   --success: #22C55E;
   --warning: #F59E0B;
-  --border: rgba(110,231,255,0.06);
-  --input: rgba(110,231,255,0.06);
-  --ring: #6EE7FF;
+  --border: #2A2A2A;
+  --input: #2A2A2A;
+  --ring: #E5E5E5;
   --radius: 0.75rem; /* 12px for minimal radius */
 }
 
@@ -34,26 +34,26 @@
 .dark {
   --background: #030303;
   --foreground: #FFFFFF;
-  --card: #0D1117;
+  --card: #111111;
   --card-foreground: #FFFFFF;
-  --popover: #0D1117;
+  --popover: #111111;
   --popover-foreground: #FFFFFF;
   --primary: #FFFFFF;
   --primary-foreground: #030303;
-  --secondary: #080B10;
-  --secondary-foreground: #D6E4F0;
-  --muted: #080B10;
-  --muted-foreground: #9FB2C6;
-  --accent: #6EE7FF;
+  --secondary: #080808;
+  --secondary-foreground: #D9D9D9;
+  --muted: #080808;
+  --muted-foreground: #A6A6A6;
+  --accent: #E5E5E5;
   --accent-foreground: #030303;
-  --accent-hover: #A5F3FC;
+  --accent-hover: #FFFFFF;
   --destructive: #ef4444;
   --destructive-foreground: #FFFFFF;
   --success: #22C55E;
   --warning: #F59E0B;
-  --border: rgba(110,231,255,0.06);
-  --input: rgba(110,231,255,0.06);
-  --ring: #6EE7FF;
+  --border: #2A2A2A;
+  --input: #2A2A2A;
+  --ring: #E5E5E5;
 }
 
 @theme inline {
@@ -117,27 +117,27 @@
 @layer components {
   .btn-premium-primary {
     @apply inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-3.5 rounded-[12px] text-sm font-medium
-      bg-card border border-accent/30 text-accent shadow-[0_2px_8px_rgba(0,0,0,0.5)]
-      hover:border-accent hover:text-accent-hover hover:bg-[#0F151C] hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(110,231,255,0.15)]
-      transition-all duration-300 ease-out active:scale-[0.98];
+      bg-[#030303] border border-accent/40 text-foreground shadow-[0_2px_8px_rgba(0,0,0,0.35)]
+      hover:border-accent hover:bg-[#080808] hover:-translate-y-[2px] hover:shadow-[0_4px_16px_rgba(0,0,0,0.4)]
+      transition-all duration-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98];
   }
 
   .btn-premium-secondary {
     @apply inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-3.5 rounded-[12px] text-sm font-medium
       bg-transparent border border-border text-foreground
-      hover:bg-secondary/50 hover:border-border/80 hover:-translate-y-0.5
-      transition-all duration-300 ease-out active:scale-[0.98];
+      hover:border-[#5A5A5A] hover:-translate-y-[2px]
+      transition-all duration-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98];
   }
 
   .btn-premium-ghost {
     @apply inline-flex items-center justify-center gap-2 sm:gap-3 px-4 py-2 rounded-[12px] text-sm font-medium
-      text-muted-foreground hover:text-foreground hover:bg-secondary/30
-      transition-all duration-300 ease-out active:scale-[0.98];
+      text-muted-foreground hover:text-foreground hover:bg-secondary
+      transition-all duration-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98];
   }
   
   .enterprise-card {
-    @apply bg-card border border-border rounded-[12px] p-6 shadow-[0_4px_24px_rgba(0,0,0,0.6)]
-      transition-all duration-500 ease-out hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-[0_8px_32px_rgba(0,0,0,0.8)];
+    @apply bg-card border border-border rounded-[12px] p-6 shadow-[0_2px_12px_rgba(0,0,0,0.35)]
+      transition-all duration-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[3px] hover:border-[#5A5A5A] hover:shadow-[0_6px_24px_rgba(0,0,0,0.5)];
   }
 }
 
@@ -161,11 +161,11 @@
 }
 
 .spotlight-hero {
-  background: radial-gradient(circle at center, rgba(110,231,255,0.03) 0%, transparent 40%);
+  background: radial-gradient(circle at center, rgba(255,255,255,0.04) 0%, transparent 40%);
 }
 
 .spotlight-subtle {
-  background: radial-gradient(ellipse at top, rgba(110,231,255,0.02) 0%, transparent 60%);
+  background: radial-gradient(ellipse at top, rgba(255,255,255,0.02) 0%, transparent 60%);
 }
 
 /* Section divider */
@@ -185,6 +185,15 @@
 }
 
 .resume-scroll::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 999px;
+  background-color: var(--border);
+  border-radius: 4px;
+}
+
+/* Live Loading Border Animation */
+@keyframes loading-border-trace {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+.animate-loading-border {
+  animation: loading-border-trace 3s linear infinite;
 }

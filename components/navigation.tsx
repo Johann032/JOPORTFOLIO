@@ -11,7 +11,6 @@ import { useIntro } from "@/components/intro-context"
 const navItems = [
   { name: "About", href: "#about" },
   { name: "Skills", href: "#skills" },
-  { name: "Journey", href: "#journey" },
   { name: "Projects", href: "#projects" },
   { name: "Contact", href: "#contact" },
 ]
@@ -114,7 +113,7 @@ export function Navigation() {
                   className={`text-sm transition-all duration-300 relative font-medium ${
                     activeSection === item.href.slice(1)
                       ? "text-foreground"
-                      : "text-muted-foreground hover:text-accent"
+                      : "text-muted-foreground hover:text-white"
                   }`}
                 >
                   {item.name}
@@ -214,7 +213,7 @@ export function Navigation() {
                   <Link
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className="text-4xl sm:text-5xl font-light text-foreground hover:text-accent transition-colors duration-300 tracking-tight block"
+                    className="text-4xl sm:text-5xl font-light text-muted-foreground hover:text-white transition-colors duration-300 tracking-tight block"
                   >
                     {item.name}
                   </Link>
@@ -231,7 +230,7 @@ export function Navigation() {
                 <ResumeModal 
                   variant="ghost" 
                   label="Resume" 
-                  triggerClassName="text-4xl sm:text-5xl font-light text-foreground hover:text-accent tracking-tight !px-0 !py-0 hover:bg-transparent min-h-[48px]" 
+                  triggerClassName="text-4xl sm:text-5xl font-light text-muted-foreground hover:text-white tracking-tight !px-0 !py-0 hover:bg-transparent min-h-[48px]" 
                 />
               </motion.div>
             </nav>

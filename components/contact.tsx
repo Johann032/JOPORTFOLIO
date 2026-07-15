@@ -42,10 +42,10 @@ export function Contact() {
               >
                 <div className="flex flex-col items-start text-left break-all w-full">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">Email Me</span>
-                  <span className="text-base sm:text-lg font-mono text-foreground group-hover:text-accent transition-colors duration-300">{site.email}</span>
+                  <span className="text-base sm:text-lg font-mono text-muted-foreground group-hover:text-white transition-colors duration-300">{site.email}</span>
                 </div>
-                <div className="self-end sm:self-auto sm:ml-4">
-                  <ArrowUpRight className="w-6 h-6 opacity-40 group-hover:opacity-100 group-hover:text-accent transition-all duration-300" />
+                <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center border border-border group-hover:border-white/20 group-hover:bg-[#111111] transition-all duration-300">
+                  <ArrowUpRight className="w-6 h-6 opacity-40 group-hover:opacity-100 group-hover:text-white transition-all duration-300" />
                 </div>
               </a>
             </div>
