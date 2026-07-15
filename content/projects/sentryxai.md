@@ -1,6 +1,6 @@
 # SentryXAI
 
-Progress: 25%
+Progress: 10%
 
 Enterprise-grade security intelligence platform.
 SentryXAI is a next-generation security intelligence platform designed to aggregate, analyze, and automate threat detection using advanced machine learning models.
@@ -27,14 +27,9 @@ This project aims to bridge the gap between massive data lakes and actionable se
 
 Welcome to the new Developer Journal.
 
-Today I finished implementing the new Markdown journal system.
-
 #### What I worked on
 
-- Simplified the journal architecture
-- Removed MDX frontmatter
-- Added automatic title parsing
-- Added automatic reading time
+
 
 #### Problems
 

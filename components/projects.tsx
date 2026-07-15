@@ -62,39 +62,6 @@ export function Projects({ projects }: { projects: any[] }) {
                       <p className="text-base md:text-lg text-[#A6A6A6] leading-relaxed max-w-2xl">
                         {project.description}
                       </p>
-                      
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-4 border-t border-[#2A2A2A] mt-6">
-                        <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
-                          <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Latest Development</span>
-                          <span className="text-sm text-white truncate font-medium">
-                            {project.latestJournal ? project.latestJournal.title : "N/A"}
-                          </span>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Date</span>
-                          <span className="text-sm text-white font-mono">
-                            {project.latestJournal ? project.latestJournal.formattedDate : "N/A"}
-                          </span>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Reading Time</span>
-                          <span className="text-sm text-white font-mono">{project.latestJournal ? project.latestJournal.readingTime : "0 min read"}</span>
-                        </div>
-                        {project.progress !== undefined && (
-                          <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
-                            <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Progress</span>
-                            <div className="flex items-center gap-3 mt-1">
-                              <div className="h-1.5 flex-1 bg-[#1A1A1A] rounded-full overflow-hidden">
-                                <div 
-                                  className="h-full bg-white rounded-full transition-all duration-1000 ease-out" 
-                                  style={{ width: `${project.progress}%` }}
-                                />
-                              </div>
-                              <span className="text-sm text-white font-mono">{project.progress}%</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
                     </div>
                   </LiveBorderCard>
                 </motion.div>
