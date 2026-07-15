@@ -189,11 +189,34 @@
   border-radius: 4px;
 }
 
-/* Live Loading Border Animation */
-@keyframes loading-border-trace {
-  0% { stroke-dashoffset: 100; }
-  100% { stroke-dashoffset: 0; }
+/* GPU Accelerated Linear Mask Sweep */
+.animate-mask-sweep {
+  mask-image: linear-gradient(
+    115deg,
+    transparent 48.5%,
+    black 50%,
+    transparent 51.5%
+  );
+  -webkit-mask-image: linear-gradient(
+    115deg,
+    transparent 48.5%,
+    black 50%,
+    transparent 51.5%
+  );
+  mask-size: 300% 300%;
+  -webkit-mask-size: 300% 300%;
+  animation: mask-sweep 5s linear infinite;
 }
-.animate-loading-border {
-  animation: loading-border-trace 3s linear infinite;
+
+@keyframes mask-sweep {
+  0% { 
+    mask-position: 100% 100%; 
+    -webkit-mask-position: 100% 100%; 
+  }
+  100% { 
+    mask-position: 0% 0%; 
+    -webkit-mask-position: 0% 0%; 
+  }
 }
+
+/* Live Loading Border Animation Removed */
