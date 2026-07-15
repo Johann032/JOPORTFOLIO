@@ -10,11 +10,11 @@ export async function generateStaticParams() {
   const projectsDir = path.join(process.cwd(), "content", "projects")
   if (!fs.existsSync(projectsDir)) return []
   
-  const slugs = fs.readdirSync(projectsDir, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name)
+  const files = fs.readdirSync(projectsDir, { withFileTypes: true })
+    .filter(dirent => dirent.isFile() && dirent.name.endsWith('.md'))
+    .map(dirent => dirent.name.replace('.md', ''))
 
-  return slugs.map(slug => ({ slug }))
+  return files.map(slug => ({ slug }))
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -48,10 +48,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <div className="p-6 bg-[#080808] border border-[#2A2A2A] rounded-xl flex flex-col gap-4">
               <h3 className="text-sm font-semibold tracking-wider text-[#A6A6A6] uppercase">Project Statistics</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
-                  <span className="text-2xl font-bold text-white">{overview.frontmatter.progress}%</span>
-                  <span className="text-xs text-[#A6A6A6]">Completion</span>
-                </div>
+                {overview.frontmatter.progress !== undefined && (
+                  <div className="flex flex-col gap-1">
+                    <span className="text-2xl font-bold text-white">{overview.frontmatter.progress}%</span>
+                    <span className="text-xs text-[#A6A6A6]">Completion</span>
+                  </div>
+                )}
                 <div className="flex flex-col gap-1">
                   <span className="text-2xl font-bold text-white">{journals.length}</span>
                   <span className="text-xs text-[#A6A6A6]">Journal Entries</span>

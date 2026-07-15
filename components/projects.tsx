@@ -53,12 +53,6 @@ export function Projects({ projects }: { projects: any[] }) {
                           <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
                             {project.title}
                           </h3>
-                          {project.status && (
-                            <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-mono font-medium text-[#A6A6A6] bg-[#111111] border border-[#2A2A2A] rounded-full uppercase tracking-wider">
-                              <span className="w-1.5 h-1.5 rounded-full bg-white" />
-                              {project.status}
-                            </span>
-                          )}
                         </div>
                         <span className="text-[#A6A6A6] group-hover:text-white transition-colors flex items-center gap-1 text-sm font-semibold tracking-wider uppercase">
                           Open Journal <ChevronRight className="w-4 h-4" />
@@ -86,18 +80,20 @@ export function Projects({ projects }: { projects: any[] }) {
                           <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Reading Time</span>
                           <span className="text-sm text-white font-mono">{project.latestJournal ? project.latestJournal.readingTime : "0 min read"}</span>
                         </div>
-                        <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
-                          <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Progress</span>
-                          <div className="flex items-center gap-3 mt-1">
-                            <div className="h-1.5 flex-1 bg-[#1A1A1A] rounded-full overflow-hidden">
-                              <div 
-                                className="h-full bg-white rounded-full transition-all duration-1000 ease-out" 
-                                style={{ width: `${project.progress || 0}%` }}
-                              />
+                        {project.progress !== undefined && (
+                          <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
+                            <span className="text-xs font-semibold text-[#A6A6A6] uppercase tracking-wider">Progress</span>
+                            <div className="flex items-center gap-3 mt-1">
+                              <div className="h-1.5 flex-1 bg-[#1A1A1A] rounded-full overflow-hidden">
+                                <div 
+                                  className="h-full bg-white rounded-full transition-all duration-1000 ease-out" 
+                                  style={{ width: `${project.progress}%` }}
+                                />
+                              </div>
+                              <span className="text-sm text-white font-mono">{project.progress}%</span>
                             </div>
-                            <span className="text-sm text-white font-mono">{project.progress || 0}%</span>
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </LiveBorderCard>
