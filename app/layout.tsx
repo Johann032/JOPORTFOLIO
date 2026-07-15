@@ -21,27 +21,27 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Johann Cherian Ajish | Computer Science Engineering Student',
-  description: 'Personal portfolio of Johann Cherian Ajish - Computer Science Engineering student passionate about cybersecurity, software development, reverse engineering, and problem solving.',
-  keywords: ['Johann Cherian Ajish', 'Computer Science', 'Cybersecurity', 'Software Developer', 'Portfolio'],
-  authors: [{ name: 'Johann Cherian Ajish' }],
+  title: 'CH3RI4N',
+  description: 'Building secure systems with intelligence.',
+  openGraph: {
+    title: 'CH3RI4N',
+    description: 'Building secure systems with intelligence.',
+    images: ['/placeholder-og.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CH3RI4N',
+    description: 'Building secure systems with intelligence.',
+    images: ['/placeholder-og.jpg'],
+  },
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/favicon.ico' },
+      { url: '/icon.png', type: 'image/png' }
     ],
     apple: '/apple-icon.png',
-  },
+    shortcut: '/favicon.ico'
+  }
 }
 
 export const viewport = {
