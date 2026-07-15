@@ -56,10 +56,28 @@ export async function getProjectJournals(slug: string): Promise<JournalEntry[]> 
     const fileContent = fs.readFileSync(filePath, "utf8")
     const { data, content } = matter(fileContent)
 
+    if (!data.title || !data.date) {
+      console.warn(`[MDX Warning] Missing required fields 'title' or 'date' in ${filePath}`);
+    }
+    
+    // gray-matter parses YYYY-MM-DD into a Date object automatically
+    let dateStr = "1970-01-01"
+    if (data.date) {
+      dateStr = data.date instanceof Date ? data.date.toISOString().split("T")[0] : String(data.date)
+    }
+
     return {
       slug: folder,
       folder, // useful to resolve images
-      frontmatter: data as JournalFrontmatter,
+      frontmatter: {
+        title: data.title || "Untitled Entry",
+        date: dateStr,
+        version: data.version,
+        progress: data.progress,
+        status: data.status,
+        timeSpent: data.timeSpent,
+        tags: data.tags
+      } as JournalFrontmatter,
       content,
     }
   }).filter((entry): entry is JournalEntry => entry !== null)

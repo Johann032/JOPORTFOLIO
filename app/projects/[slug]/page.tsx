@@ -1,17 +1,31 @@
+import fs from "fs"
+import path from "path"
 import { getProjectOverview, getProjectJournals, getAllJournalDates } from "@/lib/mdx"
 import { notFound } from "next/navigation"
 import { CustomMDX } from "@/components/mdx-remote"
 import { Heatmap } from "@/components/heatmap"
 import { JournalEntryCard } from "@/components/journal-entry"
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const overview = await getProjectOverview(params.slug)
+export async function generateStaticParams() {
+  const projectsDir = path.join(process.cwd(), "content", "projects")
+  if (!fs.existsSync(projectsDir)) return []
+  
+  const slugs = fs.readdirSync(projectsDir, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name)
+
+  return slugs.map(slug => ({ slug }))
+}
+
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const overview = await getProjectOverview(slug)
   if (!overview) {
     notFound()
   }
 
-  const journals = await getProjectJournals(params.slug)
-  const dates = await getAllJournalDates(params.slug)
+  const journals = await getProjectJournals(slug)
+  const dates = await getAllJournalDates(slug)
 
   return (
     <div className="min-h-screen bg-[#030303] text-white">
@@ -26,7 +40,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         {/* Overview & Heatmap Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <section className="prose prose-invert max-w-none p-8 bg-[#111111] border border-[#2A2A2A] rounded-xl">
-            <CustomMDX source={overview.content} projectSlug={params.slug} />
+            <CustomMDX source={overview.content} projectSlug={slug} />
           </section>
 
           <section className="flex flex-col gap-8">
@@ -56,7 +70,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
           <div className="pl-2 ml-4 border-l border-[#2A2A2A] mt-4">
             {journals.length > 0 ? (
               journals.map((entry) => (
-                <JournalEntryCard key={entry.slug} entry={entry} projectSlug={params.slug} />
+                <JournalEntryCard key={entry.slug} entry={entry} projectSlug={slug} />
               ))
             ) : (
               <p className="text-[#A6A6A6] pl-8">No journal entries yet.</p>

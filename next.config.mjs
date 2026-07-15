@@ -6,6 +6,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  outputFileTracingIncludes: {
+    '/api/content-media/**/*': ['./content/**/*'],
+    '/projects/[slug]': ['./content/**/*'],
+  },
 }
 
 export default nextConfig
