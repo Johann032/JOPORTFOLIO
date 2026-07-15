@@ -44,13 +44,16 @@ async function parseProjectFile(slug: string) {
     progress = parseInt(progressMatch[1], 10)
   }
 
-  // Remove Title and Progress from description
-  let description = overviewChunk
+  // Remove Title and Progress from full overview content
+  let fullOverviewContent = overviewChunk
     .replace(/^#\s+.+$/m, "")
     .replace(/^Progress:\s*\d+%/m, "")
     .trim()
 
-  const descriptionHtml = await marked.parse(description)
+  // The short description is just the first paragraph (or first line) of the overview content
+  let description = fullOverviewContent.split('\n').find(line => line.trim().length > 0) || ""
+
+  const descriptionHtml = await marked.parse(fullOverviewContent)
 
   // Parse Journals
   const journals: JournalEntry[] = []
@@ -112,7 +115,7 @@ async function parseProjectFile(slug: string) {
   return {
     overview: {
       frontmatter: { title, description, progress } as ProjectFrontmatter,
-      content: description,
+      content: fullOverviewContent,
       contentHtml: descriptionHtml,
     },
     journals
