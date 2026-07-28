@@ -3,30 +3,30 @@
 Progress: 10%
 
 Enterprise-grade security intelligence platform.
-SentryXAI is a next-generation security intelligence platform designed to aggregate, analyze, and automate threat detection using advanced machine learning models.
-This project aims to bridge the gap between massive data leakes and actionable security insights.
+SentryXAI is a next-generation security intelligence platform designed to aggregate, analyze, and automate threat detection using advanced machine learning models. This project aims to bridge the gap between massive data leaks and actionable security insights.
 
 ---
 
-## 15 July 2026
+## 15 August 2025
 
 ### Log #1
 
-Welcome to the new Developer Journal.
+Project Kickoff
 
 #### What I worked on
 
-- Planned out the rquirements for the project 
+- Planned out the core requirements and architecture for the project.
+- Researched the best machine learning models for anomaly detection.
 
 ---
 
-## 16 July 2026
+## 18 August 2025
 
 ### Log #2
 
-
+Initial Setup
 
 #### What I worked on
 
-- 
-
+- Initialized the Git repository and set up the Next.js frontend.
+- Created the initial database schema for storing threat intelligence logs.

@@ -99,7 +99,7 @@ export function About() {
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-6 md:gap-8">
                 {[
-                  { label: "Projects Built", value: "5" },
+                  { label: "Projects Built", value: "3" },
                   { label: "Years Learning", value: "3+" },
                 ].map((stat, index) => (
                   <motion.div 
