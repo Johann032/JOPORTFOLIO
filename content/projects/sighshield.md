@@ -1,6 +1,7 @@
 # SighShield
 
 Progress: 100%
+image: /images/projects/sighshield.png
 
 A local desktop privacy tool that automatically detects and masks sensitive information (API keys, passwords, PII) on your screen in real-time to prevent accidental leaks during screen sharing.
 

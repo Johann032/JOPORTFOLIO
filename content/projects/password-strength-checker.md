@@ -2,6 +2,7 @@
 
 Progress: 100%
 Status: Completed
+image: /images/projects/password-strength-checker.png
 
 A straightforward password strength evaluation tool.
 It evaluates how strong a password is by analyzing its length, character variety, and checking for common dictionary words.

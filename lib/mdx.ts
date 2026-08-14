@@ -9,6 +9,7 @@ export type ProjectFrontmatter = {
   title: string
   description: string
   progress?: number
+  image?: string
 }
 
 export type JournalEntry = {
@@ -44,10 +45,18 @@ async function parseProjectFile(slug: string) {
     progress = parseInt(progressMatch[1], 10)
   }
 
-  // Remove Title and Progress from full overview content
+  let image: string | undefined = undefined
+  const imageMatch = overviewChunk.match(/^image:\s*(.+)$/m)
+  if (imageMatch) {
+    image = imageMatch[1].trim()
+  }
+
+  // Remove Title, Progress, Status, and Image from full overview content
   let fullOverviewContent = overviewChunk
     .replace(/^#\s+.+$/m, "")
     .replace(/^Progress:\s*\d+%/m, "")
+    .replace(/^Status:\s*.+$/m, "")
+    .replace(/^image:\s*.+$/m, "")
     .trim()
 
   // The short description is just the first paragraph (or first line) of the overview content
@@ -114,7 +123,7 @@ async function parseProjectFile(slug: string) {
 
   return {
     overview: {
-      frontmatter: { title, description, progress } as ProjectFrontmatter,
+      frontmatter: { title, description, progress, image } as ProjectFrontmatter,
       content: fullOverviewContent,
       contentHtml: descriptionHtml,
     },

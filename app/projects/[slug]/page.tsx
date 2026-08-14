@@ -3,6 +3,7 @@ import path from "path"
 import { getProjectOverview, getProjectJournals, getAllJournalDates } from "@/lib/mdx"
 import { notFound } from "next/navigation"
 import { JournalEntryCard } from "@/components/journal-entry"
+import Image from "next/image"
 
 export async function generateStaticParams() {
   const projectsDir = path.join(process.cwd(), "content", "projects")
@@ -29,11 +30,26 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <div className="min-h-screen bg-[#030303] text-white">
       <main className="max-w-5xl mx-auto px-6 py-24 flex flex-col gap-16">
         
-        {/* Header */}
-        <header className="flex flex-col gap-4">
-          <h1 className="text-5xl font-bold tracking-tight text-white">{overview.frontmatter.title}</h1>
-          <p className="text-xl text-[#A6A6A6]">{overview.frontmatter.description}</p>
-        </header>
+        {/* Header & Image Section */}
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+          <header className="flex flex-col gap-6 lg:flex-1 lg:pt-8">
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">{overview.frontmatter.title}</h1>
+            <p className="text-xl text-[#A6A6A6] leading-relaxed">{overview.frontmatter.description}</p>
+          </header>
+
+          {overview.frontmatter.image && (
+            <div className="w-full lg:w-[45%] shrink-0 relative aspect-video lg:aspect-[4/3] rounded-2xl overflow-hidden border border-[#2A2A2A] shadow-2xl">
+              <Image
+                src={overview.frontmatter.image}
+                alt={overview.frontmatter.title}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 45vw"
+              />
+            </div>
+          )}
+        </div>
 
         {/* Overview & Statistics Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

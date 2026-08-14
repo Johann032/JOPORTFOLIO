@@ -2,6 +2,7 @@
 
 Progress: 100%
 Status: Completed
+image: /images/projects/packet-analyzer.png
 
 A simple, low-level network packet sniffer built with Python and Scapy.
 Designed to capture network traffic, read basic headers, and show you exactly what is flowing across your network. 
