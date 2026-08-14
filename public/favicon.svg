@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="scan-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0" />
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <style>
+    @keyframes subtle-scan {
+      0%, 92% { transform: translateX(-30px) skewX(-25deg); opacity: 0; }
+      93% { opacity: 1; }
+      99% { transform: translateX(80px) skewX(-25deg); opacity: 0; }
+      100% { transform: translateX(80px) skewX(-25deg); opacity: 0; }
+    }
+    .scanner { 
+      animation: subtle-scan 10s infinite linear; 
+    }
+  </style>
+  
+  <!-- Deep Black Background -->
+  <rect width="64" height="64" rx="14" fill="#0A0A0A" />
+  
+  <!-- Platinum C3 Monogram -->
+  <!-- Left Side: 'C' -->
+  <path d="M 12 14 h 18 v 8 h -10 v 20 h 10 v 8 h -18 Z" fill="#EAEAEA" />
+  
+  <!-- Right Side: '3' Bracket -->
+  <path d="M 52 14 v 36 h -18 v -8 h 10 v -20 h -10 v -8 Z" fill="#EAEAEA" />
+  
+  <!-- Extremely Subtle Ice-Blue Accent (Middle bar of '3') -->
+  <rect x="36" y="28" width="8" height="8" fill="#00D4FF" />
+  
+  <!-- One Subtle 800ms Scan Every 10 Seconds -->
+  <rect class="scanner" x="0" y="-10" width="24" height="84" fill="url(#scan-grad)" pointer-events="none" />
+</svg>

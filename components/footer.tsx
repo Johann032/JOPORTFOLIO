@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Mail, ArrowUp } from "lucide-react"
+import { Mail, ArrowUp, Linkedin } from "lucide-react"
 import { site } from "@/lib/site"
 
 export function Footer() {
@@ -49,6 +49,15 @@ export function Footer() {
             </p>
 
             <div className="flex items-center gap-4">
+              <a
+                href={site.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:border-white/20 hover:text-white transition-all duration-300 hover:-translate-y-0.5"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={16} />
+              </a>
               <a
                 href={`mailto:${site.email}`}
                 className="w-12 h-12 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:border-white/20 hover:text-white transition-all duration-300 hover:-translate-y-0.5"

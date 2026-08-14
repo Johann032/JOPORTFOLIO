@@ -22,26 +22,24 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'CH3RI4N',
+  title: 'CH3RI4N — Cybersecurity',
   description: 'Building secure systems with intelligence.',
   openGraph: {
-    title: 'CH3RI4N',
+    title: 'CH3RI4N — Cybersecurity',
     description: 'Building secure systems with intelligence.',
     images: ['/placeholder-og.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CH3RI4N',
+    title: 'CH3RI4N — Cybersecurity',
     description: 'Building secure systems with intelligence.',
     images: ['/placeholder-og.jpg'],
   },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon.png', type: 'image/png' }
+      { url: '/favicon.svg', type: 'image/svg+xml' }
     ],
-    apple: '/apple-icon.png',
-    shortcut: '/favicon.ico'
+    shortcut: '/favicon.svg'
   }
 }
 

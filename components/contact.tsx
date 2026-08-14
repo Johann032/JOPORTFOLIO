@@ -34,17 +34,32 @@ export function Contact() {
               Have a project in mind or just want to chat? {"I'd"} love to hear from you.
             </p>
             
-            {/* Contact link */}
-            <div className="mt-12">
+            {/* Contact links */}
+            <div className="mt-12 flex flex-col gap-4 w-full max-w-sm sm:max-w-md">
               <a 
                 href={`mailto:${site.email}`}
-                className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 p-6 sm:p-8 rounded-[12px] enterprise-card w-full max-w-sm sm:max-w-md"
+                className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 p-6 sm:p-8 rounded-[12px] enterprise-card w-full"
               >
                 <div className="flex flex-col items-start text-left break-all w-full">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">Email Me</span>
                   <span className="text-base sm:text-lg font-mono text-muted-foreground group-hover:text-white transition-colors duration-300">{site.email}</span>
                 </div>
-                <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center border border-border group-hover:border-white/20 group-hover:bg-[#111111] transition-all duration-300">
+                <div className="w-12 h-12 shrink-0 rounded-full bg-secondary flex items-center justify-center border border-border group-hover:border-white/20 group-hover:bg-[#111111] transition-all duration-300">
+                  <ArrowUpRight className="w-6 h-6 opacity-40 group-hover:opacity-100 group-hover:text-white transition-all duration-300" />
+                </div>
+              </a>
+              
+              <a 
+                href={site.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 p-6 sm:p-8 rounded-[12px] enterprise-card w-full"
+              >
+                <div className="flex flex-col items-start text-left break-all w-full">
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">LinkedIn</span>
+                  <span className="text-base sm:text-lg font-mono text-muted-foreground group-hover:text-white transition-colors duration-300">in/ch3ri4n</span>
+                </div>
+                <div className="w-12 h-12 shrink-0 rounded-full bg-secondary flex items-center justify-center border border-border group-hover:border-white/20 group-hover:bg-[#111111] transition-all duration-300">
                   <ArrowUpRight className="w-6 h-6 opacity-40 group-hover:opacity-100 group-hover:text-white transition-all duration-300" />
                 </div>
               </a>
