@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion"
 
-
 const skillCategories = [
   {
     title: "Cybersecurity",
@@ -48,7 +47,7 @@ export function Skills() {
                 What I work with
               </h2>
               <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
-                A curated set of tools and technologies {"I've"} developed proficiency in through hands-on projects.
+                A curated set of tools and technologies I've developed proficiency in through hands-on projects.
               </p>
             </div>
           </motion.div>

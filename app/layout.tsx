@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { IntroProvider } from '@/components/intro-context'
+import { Ch3rProvider } from '@/components/ch3r-context'
+import { CH3RCompanion } from '@/components/ch3r'
 import { LayoutGroup } from 'framer-motion'
 import './globals.css'
 
@@ -62,18 +64,21 @@ export default function RootLayout({
     <html lang="en" className="bg-background">
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background text-foreground`}>
         <IntroProvider>
-          <LayoutGroup>
-            {/* Global Background Layers */}
-            <div className="fixed inset-0 z-[-1] bg-background">
-              <div className="absolute inset-0 bg-engineering-grid" />
-              <div className="absolute inset-0 bg-noise" />
-              <div className="absolute inset-0 bg-vignette" />
-            </div>
-            
-            <div className="relative z-0">
-              {children}
-            </div>
-          </LayoutGroup>
+          <Ch3rProvider>
+            <LayoutGroup>
+              {/* Global Background Layers */}
+              <div className="fixed inset-0 z-[-1] bg-background">
+                <div className="absolute inset-0 bg-engineering-grid" />
+                <div className="absolute inset-0 bg-noise" />
+                <div className="absolute inset-0 bg-vignette" />
+              </div>
+              
+              <div className="relative z-0">
+                {children}
+              </div>
+              <CH3RCompanion />
+            </LayoutGroup>
+          </Ch3rProvider>
         </IntroProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

@@ -220,3 +220,36 @@
 }
 
 /* Live Loading Border Animation Removed */
+
+@keyframes reflection-sweep {
+  0% { transform: translateX(-150%) translateY(-50%) rotate(30deg); opacity: 0; }
+  5% { opacity: 1; }
+  15% { transform: translateX(150%) translateY(50%) rotate(30deg); opacity: 0; }
+  100% { transform: translateX(150%) translateY(50%) rotate(30deg); opacity: 0; }
+}
+
+.animate-reflection-sweep {
+  animation: reflection-sweep 25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes breathe {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.06) translateY(-2%); }
+}
+
+@keyframes sway {
+  0% { transform: translateX(-2%); }
+  100% { transform: translateX(2%); }
+}
+
+.animate-breathe {
+  animation: breathe 6s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.animate-sway {
+  animation: sway 8s ease-in-out infinite alternate;
+  will-change: transform;
+}
+

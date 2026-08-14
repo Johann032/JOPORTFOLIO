@@ -1,38 +1,33 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { ResumeModal } from "@/components/resume-modal"
 import { site } from "@/lib/site"
 import { scrollToSection } from "@/lib/scroll"
 import { useIntro } from "@/components/intro-context"
+import { useCh3rState } from "@/components/ch3r-context"
 
 const navItems = [
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
+  { name: "About", href: "/#about" },
+  { name: "Skills", href: "/#skills" },
+  { name: "Experiences", href: "/#experiences" },
+  { name: "Projects", href: "/#projects" },
+  { name: "Contact", href: "/#contact" },
 ]
 
 export function Navigation() {
+  const pathname = usePathname()
   const { isIntroComplete, isMounted, isIntroSkipped } = useIntro()
+  const { activeSection } = useCh3rState()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("")
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100)
-      
-      const sections = navItems.map(item => item.href.slice(1))
-      for (const section of [...sections].reverse()) {
-        const element = document.getElementById(section)
-        if (element && window.scrollY >= element.offsetTop - 200) {
-          setActiveSection(section)
-          break
-        }
-      }
     }
     window.addEventListener("scroll", handleScroll, { passive: true })
     handleScroll()
@@ -53,19 +48,27 @@ export function Navigation() {
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
-    e.preventDefault()
-    setIsMobileMenuOpen(false)
-    setTimeout(() => {
-      scrollToSection(href)
-    }, 300) // wait for menu animation
+    if (pathname === "/") {
+      e.preventDefault()
+      setIsMobileMenuOpen(false)
+      setTimeout(() => {
+        scrollToSection(href.replace('/', ''))
+      }, 300) // wait for menu animation
+    } else {
+      setIsMobileMenuOpen(false)
+    }
   }
 
   const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    setIsMobileMenuOpen(false)
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" })
-    }, 300)
+    if (pathname === "/") {
+      e.preventDefault()
+      setIsMobileMenuOpen(false)
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }, 300)
+    } else {
+      setIsMobileMenuOpen(false)
+    }
   }
 
   return (
@@ -111,13 +114,13 @@ export function Navigation() {
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
                   className={`text-sm transition-all duration-300 relative font-medium ${
-                    activeSection === item.href.slice(1)
+                    activeSection === item.href.replace('/#', '')
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-white"
                   }`}
                 >
                   {item.name}
-                  {activeSection === item.href.slice(1) && (
+                  {activeSection === item.href.replace('/#', '') && (
                     <motion.div
                       layoutId="activeSection"
                       className="absolute -bottom-1 left-0 right-0 h-px bg-foreground"

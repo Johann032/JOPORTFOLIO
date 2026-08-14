@@ -6,9 +6,11 @@ import { Projects } from "@/components/projects"
 import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
 import { getProjects } from "@/lib/mdx"
-
+import { getExperiences } from "@/lib/experiences"
+import { Experiences } from "@/components/experiences"
 export default async function Home() {
   const projects = await getProjects()
+  const experiences = await getExperiences()
 
   return (
     <main className="min-h-screen bg-background">
@@ -16,6 +18,7 @@ export default async function Home() {
       <Hero />
       <About />
       <Skills />
+      <Experiences experiences={experiences} />
       <Projects projects={projects} />
       <Contact />
       <Footer />

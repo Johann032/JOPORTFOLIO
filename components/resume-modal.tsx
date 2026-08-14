@@ -43,13 +43,7 @@ export function ResumeModal({
   const handleDownload = () => {
     if (!hasAgreed) return
     
-    // Trigger download programmatically
-    const link = document.createElement("a")
-    link.href = site.resumePath
-    link.download = site.resumeFileName || "resume.pdf"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    window.open(site.resumePath, '_blank')
     
     setOpen(false)
   }
