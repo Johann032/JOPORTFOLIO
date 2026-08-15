@@ -4,7 +4,6 @@ import { motion } from "framer-motion"
 import { LiveBorderCard } from "@/components/ui/live-border-card"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import Image from "next/image"
 import { ChevronRight, CheckCircle2 } from "lucide-react"
 
 function StaticBorderCard({ children, className }: { children: React.ReactNode, className?: string }) {
@@ -73,19 +72,6 @@ export function Projects({ projects }: { projects: any[] }) {
                   >
                     <CardComponent className="w-full group/project">
                       <div className="p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row gap-6 lg:gap-8 items-center w-full h-full">
-                        
-                        {project.image && (
-                          <div className="w-full lg:w-[300px] shrink-0 relative aspect-video rounded-xl overflow-hidden border border-[#2A2A2A] shadow-md transition-shadow duration-500 group-hover/project:shadow-xl">
-                            <Image
-                              src={project.image}
-                              alt={project.title}
-                              fill
-                              priority={index === 0}
-                              sizes="(max-width: 1024px) 100vw, 300px"
-                              className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/project:scale-[1.02]"
-                            />
-                          </div>
-                        )}
                         
                         <div className="w-full flex-1 flex flex-col justify-center space-y-4 relative z-10">
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 border-b border-[#2A2A2A] pb-4">
