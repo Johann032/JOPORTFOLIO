@@ -1,223 +1,137 @@
 "use client"
 
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion"
-import { useRef, useState, useEffect } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef } from "react"
 import { ResumeModal } from "@/components/resume-modal"
 import { scrollToSection } from "@/lib/scroll"
 import { useIntro } from "@/components/intro-context"
-
-// Scramble text effect for a premium "decryption" feel
-const ScrambleText = ({ text, delay }: { text: string, delay: number }) => {
-  const [displayText, setDisplayText] = useState("")
-  const [isScrambling, setIsScrambling] = useState(false)
-  const [hasStarted, setHasStarted] = useState(false)
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*"
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout
-    let interval: NodeJS.Timeout
-
-    timeout = setTimeout(() => {
-      setHasStarted(true)
-      setIsScrambling(true)
-      let iteration = 0
-      
-      interval = setInterval(() => {
-        setDisplayText(
-          text
-            .split("")
-            .map((char, index) => {
-              if (index < iteration) {
-                return text[index]
-              }
-              return char === " " ? " " : chars[Math.floor(Math.random() * chars.length)]
-            })
-            .join("")
-        )
-        
-        if (iteration >= text.length) {
-          clearInterval(interval)
-          setIsScrambling(false)
-        }
-        
-        iteration += 1 / 2 // Speed of decryption
-      }, 30)
-    }, delay * 1000)
-
-    return () => {
-      clearTimeout(timeout)
-      clearInterval(interval)
-    }
-  }, [text, delay])
-
-  if (!hasStarted) return <span className="opacity-0">{text}</span>
-
-  return (
-    <span className={isScrambling ? "text-white font-mono" : "text-white transition-colors duration-500"}>
-      {displayText}
-    </span>
-  )
-}
+import { ChimeraScene } from "@/components/chimera-scene"
+import { HeroMetadata } from "@/components/hero-metadata"
 
 export function Hero() {
-  const { isMounted, isIntroSkipped } = useIntro()
-  const baseDelay = 0
+  const { isMounted } = useIntro()
   const containerRef = useRef<HTMLDivElement>(null)
 
-  
-  // Parallax effect
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   })
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-
-  // Mouse interaction
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
   
-  const springConfig = { damping: 50, stiffness: 100, mass: 1 }
-  const spotlightX = useSpring(mouseX, springConfig)
-  const spotlightY = useSpring(mouseY, springConfig)
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return
-    const rect = containerRef.current.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    const moveX = ((e.clientX - centerX) / (rect.width / 2)) * 40
-    const moveY = ((e.clientY - centerY) / (rect.height / 2)) * 40
-    mouseX.set(moveX)
-    mouseY.set(moveY)
-  }
+  // Smooth scroll-away: scales down and fades out
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8])
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "15%"])
 
   const premiumEasing = [0.16, 1, 0.3, 1]
 
   return (
     <section 
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-transparent perspective-1000"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
     >
-      {isMounted && (
-        <>
-          {/* Dynamic Background System */}
-          
-          {/* 1. Animated Grid that fades in behind the scanner */}
-          <motion.div 
-            className="absolute inset-0 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.03 }}
-            transition={{ duration: 2.0, delay: baseDelay, ease: "linear" }}
-            style={{
-              backgroundImage: `
-                linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px)
-              `,
-              backgroundSize: '40px 40px',
-              maskImage: 'radial-gradient(circle at center, black 0%, transparent 80%)',
-              WebkitMaskImage: 'radial-gradient(circle at center, black 0%, transparent 80%)'
-            }}
-          />
-
-      {/* 2. Interactive Spotlight - Hidden on mobile for performance */}
+      {/* 3D Canvas Background Layer */}
       <motion.div 
-        className="hidden md:flex absolute inset-0 pointer-events-none items-center justify-center mix-blend-screen"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2, delay: 0.5 }}
+        className="absolute inset-0 z-0 pointer-events-none"
       >
-        <motion.div 
-          className="w-[1000px] h-[1000px] rounded-full"
-          style={{
-            x: spotlightX,
-            y: spotlightY,
-            background: "radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 50%)",
-            filter: "blur(60px)"
-          }}
-        />
+        <ChimeraScene />
       </motion.div>
 
-      <motion.div 
-        style={{ y, opacity }}
-        className="relative z-10 max-w-5xl mx-auto px-6 flex flex-col items-center justify-center text-center mt-8"
-      >
-        {/* Name with Scramble Decrypt Effect */}
-        <div className="mb-12 h-6 flex items-center justify-center">
-          <span className="text-sm md:text-base font-bold tracking-[0.3em] uppercase">
-            <ScrambleText text="JOHANN CHERIAN AJISH" delay={0.1} />
-          </span>
-        </div>
-
-        {/* Heading with 3D Flip Reveal */}
-        <div className="relative text-4xl min-[400px]:text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold text-white tracking-tighter leading-[1.05] mb-12 flex flex-col items-center" style={{ perspective: "1000px" }}>
-          
-          <div className="overflow-hidden py-2" style={{ transformStyle: "preserve-3d" }}>
-            <motion.div 
-              initial={{ opacity: 0, rotateX: -90, y: 20 }}
-              animate={{ opacity: 1, rotateX: 0, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2, ease: premiumEasing }}
-              style={{ transformOrigin: "top" }}
-              className="text-white"
+      {/* Foreground Content */}
+      {isMounted && (
+        <motion.div 
+          style={{ y, opacity }}
+          className="relative z-10 w-full max-w-[90rem] mx-auto px-6 sm:px-12 pt-[calc(env(safe-area-inset-top,20px)+4rem)] pb-[calc(env(safe-area-inset-bottom,20px)+2rem)] lg:pt-20 lg:pb-0 min-h-[100dvh] flex flex-col lg:flex-row items-start lg:items-center justify-between pointer-events-none"
+        >
+          {/* Left/Center Identity (Top on Mobile) */}
+          <div className="flex flex-col items-start gap-4 pointer-events-auto lg:ml-12 w-full lg:w-auto">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: premiumEasing }}
+              className="text-xs font-mono tracking-widest text-muted-foreground/60 uppercase"
             >
-              Building secure systems
+              &gt; WHO_AM_I
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
+              animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: premiumEasing }}
+              className="text-[clamp(3.5rem,10vw,6.5rem)] font-bold text-white tracking-tighter leading-[0.9]"
+            >
+              CH3RI4N
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: premiumEasing }}
+              className="text-base sm:text-lg lg:text-xl text-muted-foreground/80 max-w-md leading-relaxed mt-2 sm:mt-6 font-medium text-pretty"
+            >
+              Building secure systems.<br/>
+              Breaking things. Learning endlessly.
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: premiumEasing }}
+              className="flex flex-wrap items-center gap-6 sm:gap-8 mt-6 sm:mt-10"
+            >
+              <a
+                href="#projects"
+                onClick={(e) => {
+                  e.preventDefault()
+                  scrollToSection("#projects")
+                }}
+                className="text-xs font-mono tracking-widest text-white border border-white/20 px-6 py-3 hover:bg-white/10 hover:border-white/40 transition-all uppercase"
+              >
+                &gt; EXPLORE MY WORK
+              </a>
+              <ResumeModal variant="ghost" label="VIEW RESUME &gt;" triggerClassName="text-xs font-mono tracking-widest text-muted-foreground hover:text-white uppercase !px-0 !py-0 hover:bg-transparent transition-colors" />
             </motion.div>
           </div>
-          
-          <div className="overflow-hidden py-2" style={{ transformStyle: "preserve-3d" }}>
-            <motion.div 
-              initial={{ opacity: 0, rotateX: -90, y: 20 }}
-              animate={{ opacity: 1, rotateX: 0, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3, ease: premiumEasing }}
-              style={{ transformOrigin: "top" }}
-              className="text-muted-foreground"
-            >
-              with intelligence.
-            </motion.div>
-          </div>
-        </div>
 
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
-          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-          transition={{ duration: 0.4, delay: 0.4, ease: premiumEasing }}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-loose text-pretty mb-16 font-medium"
-        >
-          Computer Science student focused on cybersecurity, AI, and defensive engineering.
-        </motion.p>
-
-        {/* Buttons with subtle entry */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.35, delay: 0.5, ease: premiumEasing }}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 w-full sm:w-auto px-4 sm:px-0"
-        >
-          <a
-            href="#projects"
-            onClick={(e) => {
-              e.preventDefault()
-              scrollToSection("#projects")
-            }}
-            className="relative group overflow-hidden btn-premium-primary min-h-[48px] w-full sm:w-auto"
-          >
-            <span className="relative z-10">View Projects</span>
-            {/* Minimal metallic sheen */}
-            <motion.div 
-              className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-20deg]"
-              initial={{ left: "-100%" }}
-              whileHover={{ left: "200%" }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            />
-          </a>
-          <div className="w-full sm:w-auto flex flex-col">
-            <ResumeModal variant="secondary" triggerClassName="min-h-[48px] w-full" />
+          {/* Right Metadata (Bottom on Mobile) */}
+          <div className="pointer-events-auto mt-auto pt-24 lg:pt-0 lg:mr-12 lg:mt-0 w-full lg:w-auto">
+            <HeroMetadata />
           </div>
         </motion.div>
-      </motion.div>
-        </>
+      )}
+
+      {/* Grid Overlay */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.02] mix-blend-overlay"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, rgba(255,255,255,1) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255,255,255,1) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+        }}
+      />
+
+      {/* Scroll Indicator */}
+      {isMounted && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6 z-10 pointer-events-none"
+        >
+          <motion.div 
+            animate={{ 
+              y: [0, 8, 0],
+              opacity: [0.3, 1, 0.3]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="w-[1px] h-12 bg-gradient-to-b from-white/0 via-white/40 to-white/0" 
+          />
+        </motion.div>
       )}
     </section>
   )
