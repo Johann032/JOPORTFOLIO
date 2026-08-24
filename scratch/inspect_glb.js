@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const data = fs.readFileSync('public/models/chimera-final.glb');
+const data = fs.readFileSync('public/models/cyber-owl.glb');
 
 // The GLB format has a 12-byte header, then chunks.
 // Chunk 0 is always JSON.
