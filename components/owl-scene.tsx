@@ -20,7 +20,7 @@ class ModelErrorBoundary extends Component<{ fallback: ReactNode, children: Reac
   }
 }
 
-function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => void }) {
+function HalftoneOwl({ url, onModalOpen, onLoaded }: { url: string, onModalOpen: () => void, onLoaded?: () => void }) {
   const { size, camera } = useThree()
   const isMobile = size.width < 768
   const isTablet = size.width >= 768 && size.width < 1024
@@ -34,8 +34,11 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
     return scene
   }, [])
   
-  // FBO setup - auto-sizes to viewport
-  const renderTarget = useFBO({
+  // FBO setup - strictly controlled resolution to prevent 4K overhead
+  const fboWidth = isMobile ? 256 : 512
+  const fboHeight = fboWidth / aspect
+
+  const renderTarget = useFBO(fboWidth, fboHeight, {
     minFilter: THREE.LinearFilter,
     magFilter: THREE.LinearFilter,
     format: THREE.RGBAFormat,
@@ -162,24 +165,24 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
     return geo
   }, [aspect, camera, isMobile])
 
-  const shaderUniforms = useMemo(() => ({
-    uTexture: { value: renderTarget.texture },
-    uPointerPos: { value: new THREE.Vector3(0, 0, 0) },
-    uHoverState: { value: 0.0 },
-    uTime: { value: 0.0 },
-    uPulse: { value: 0.0 },
-    uResolution: { value: new THREE.Vector2(size.width, size.height) }
-  }), [renderTarget.texture, size.width, size.height])
-
   const shaderMat = useMemo(() => {
     return new THREE.ShaderMaterial({
-      uniforms: shaderUniforms,
+      uniforms: {
+        uTexture: { value: null },
+        uPointerPos: { value: new THREE.Vector3(0, 0, 0) },
+        uHoverState: { value: 0.0 },
+        uBreath: { value: 1.0 },
+        uTime: { value: 0.0 },
+        uPulse: { value: 0.0 },
+        uResolution: { value: new THREE.Vector2(0, 0) }
+      },
       transparent: true,
       depthWrite: false,
       vertexShader: `
         uniform sampler2D uTexture;
         uniform vec3 uPointerPos;
         uniform float uHoverState;
+        uniform float uBreath;
         uniform float uTime;
         uniform float uPulse;
         
@@ -203,6 +206,11 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
           vVisibility = 1.0;
           
           vec3 pos = position;
+          
+          // Subtle idle breathing particle displacement
+          float breathOffset = sin(pos.y * 2.5 + uTime * 1.4) * cos(pos.x * 2.5 + uTime * 1.4) * 0.02 * uBreath;
+          pos.z += breathOffset;
+          
           float dist = distance(pos.xy, uPointerPos.xy);
           
           // Interaction radius for digital sensor effect
@@ -223,7 +231,7 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
           float hoverBoost = influence * 2.5;
           
           // Depth attenuation
-          gl_PointSize = (baseSize + hoverBoost + pulseWave * 4.0) * (10.0 / -mvPosition.z);
+          gl_PointSize = (baseSize + hoverBoost + pulseWave * 4.0) * (10.0 / -mvPosition.z) * (1.0 + breathOffset * 3.0);
           
           // Color remains calm, monochromatic, and structural
           vec3 baseColor = mix(vec3(0.4, 0.4, 0.45), vec3(1.0, 1.0, 1.0), lum);
@@ -249,9 +257,16 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
         }
       `
     })
-  }, [shaderUniforms])
+  }, [])
+
+  // Update uniforms that change on resize/initialization without recreating the material
+  useEffect(() => {
+    shaderMat.uniforms.uTexture.value = renderTarget.texture
+    shaderMat.uniforms.uResolution.value.set(size.width, size.height)
+  }, [renderTarget.texture, size.width, size.height, shaderMat])
 
   const tempVec = useMemo(() => new THREE.Vector3(), [])
+  const hasLoaded = useRef(false)
 
   useFrame((state, delta) => {
     // 1. Update uniforms (pointer math mapped to Z=0 grid)
@@ -262,13 +277,17 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
       const dist = -state.camera.position.z / tempVec.z
       intersectionPoint.current.copy(state.camera.position).add(tempVec.multiplyScalar(dist))
 
-      shaderUniforms.uTime.value = state.clock.elapsedTime
-      shaderUniforms.uPointerPos.value.lerp(intersectionPoint.current, 0.15)
+      shaderMat.uniforms.uTime.value = state.clock.elapsedTime
+      shaderMat.uniforms.uPointerPos.value.lerp(intersectionPoint.current, 0.15)
       
       const now = Date.now()
       const timeSinceLastMove = now - lastPointerTime.current
       const targetHover = (timeSinceLastMove < 500 && lastPointerTime.current > 0) ? 1.0 : 0.0
-      shaderUniforms.uHoverState.value = THREE.MathUtils.lerp(shaderUniforms.uHoverState.value, targetHover, 0.1)
+      shaderMat.uniforms.uHoverState.value = THREE.MathUtils.lerp(shaderMat.uniforms.uHoverState.value, targetHover, 0.1)
+      
+      // Breathing fades in gradually when idle, fades out smoothly on mouse move
+      const targetBreath = (timeSinceLastMove > 1000 || lastPointerTime.current === 0) ? 1.0 : 0.0
+      shaderMat.uniforms.uBreath.value = THREE.MathUtils.damp(shaderMat.uniforms.uBreath.value, targetBreath, 3, delta)
       
       if (targetHover > 0.5 && timeSinceLastMove < 100) {
         document.body.style.cursor = "crosshair"
@@ -280,9 +299,9 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
         const pAge = now - clickPulseTime.current
         if (pAge < 800) {
           const progress = pAge / 800
-          shaderUniforms.uPulse.value = (1.0 - progress) * Math.sin(progress * Math.PI)
+          shaderMat.uniforms.uPulse.value = (1.0 - progress) * Math.sin(progress * Math.PI)
         } else {
-          shaderUniforms.uPulse.value = 0.0
+          shaderMat.uniforms.uPulse.value = 0.0
           clickPulseTime.current = 0
         }
       }
@@ -290,17 +309,29 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
 
     // 2. Render Hidden Scene to FBO
     if (group.current) {
-      // Very subtle idle breathing vertically
-      const idlePosY = Math.sin(state.clock.elapsedTime * 1.2) * 0.015
-      
       // Scroll parallax scaling
       const scrollY = window.scrollY
       const vh = window.innerHeight || 1000
       const progress = Math.min(Math.max(scrollY / vh, 0.0), 1.0)
       const lerpedScale = baseScale * (1.0 - progress * 0.1)
       
-      group.current.scale.set(lerpedScale, lerpedScale, lerpedScale)
+      const time = state.clock.elapsedTime
+      const breathPhase = time * 1.4 // ~4.5 seconds per cycle
+      const breathIntensity = prefersReducedMotion ? 0 : shaderMat.uniforms.uBreath.value
+      
+      // Vertical bob (~2-4 pixels)
+      const idlePosY = Math.sin(breathPhase) * 0.015 * breathIntensity
+      
+      // Depth bob (forward/back)
+      const idlePosZ = Math.cos(breathPhase) * 0.01 * breathIntensity
+      
+      // Scale breath (0.7% change)
+      const scaleBreath = 1.0 + (Math.sin(breathPhase - Math.PI/2) * 0.007 * breathIntensity)
+      const currentScale = lerpedScale * scaleBreath
+      
+      group.current.scale.set(currentScale, currentScale, currentScale)
       group.current.position.y = yOffset + idlePosY
+      group.current.position.z = idlePosZ
       
       // Smooth Rotation Tracking
       let finalTargetX = 0
@@ -324,6 +355,13 @@ function HalftoneOwl({ url, onModalOpen }: { url: string, onModalOpen: () => voi
     state.gl.setRenderTarget(renderTarget)
     state.gl.render(hiddenScene, state.camera)
     state.gl.setRenderTarget(null)
+    
+    if (!hasLoaded.current) {
+      hasLoaded.current = true
+      if (onLoaded) {
+        onLoaded()
+      }
+    }
   })
 
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
@@ -370,7 +408,7 @@ function FallbackVisual() {
   )
 }
 
-export function OwlScene() {
+export function OwlScene({ onLoaded }: { onLoaded?: () => void }) {
   const [dpr, setDpr] = useState<[number, number]>([1, 2])
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -386,7 +424,7 @@ export function OwlScene() {
         <AdaptiveEvents />
         <ModelErrorBoundary fallback={<FallbackVisual />}>
           <Suspense fallback={null}>
-            <HalftoneOwl url="/models/cyber-owl.glb" onModalOpen={() => setIsModalOpen(true)} />
+            <HalftoneOwl url="/models/cyber-owl.glb" onModalOpen={() => setIsModalOpen(true)} onLoaded={onLoaded} />
           </Suspense>
         </ModelErrorBoundary>
       </Canvas>

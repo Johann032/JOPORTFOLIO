@@ -59,6 +59,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-background">
+      <head>
+        <link rel="preload" href="/models/cyber-owl.glb" as="fetch" crossOrigin="anonymous" />
+      </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background text-foreground`}>
         <IntroProvider>
           <Ch3rProvider>

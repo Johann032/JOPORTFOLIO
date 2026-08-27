@@ -3,11 +3,16 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef, useState, useEffect } from "react"
 import { useIntro } from "@/components/intro-context"
-import { OwlScene } from "@/components/owl-scene"
+import dynamic from 'next/dynamic'
+
+const OwlScene = dynamic(() => import('@/components/owl-scene').then(mod => mod.OwlScene), {
+  ssr: false,
+})
 
 export function Hero() {
   const { isMounted } = useIntro()
   const containerRef = useRef<HTMLDivElement>(null)
+  const [owlLoaded, setOwlLoaded] = useState(false)
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -36,13 +41,30 @@ export function Hero() {
       ref={containerRef}
       className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-black"
     >
-      {/* 3D Canvas Background Layer */}
-      <motion.div 
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{ y, opacity }}
-      >
-        <OwlScene />
-      </motion.div>
+      {/* 3D Canvas Background Layer with Placeholder */}
+      <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
+        {/* The Placeholder - extremely faint monochrome glow */}
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: owlLoaded ? 0 : 1 }}
+          transition={{ duration: 0.5, ease: premiumEasing }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        >
+          <div className="w-[30vw] h-[30vw] max-w-[300px] max-h-[300px] rounded-full bg-white/5 blur-3xl opacity-30" />
+          <div className="absolute w-[20vw] h-[40vw] max-w-[200px] max-h-[400px] rounded-full bg-white/5 blur-2xl opacity-20 mix-blend-screen" />
+        </motion.div>
+
+        {/* The actual 3D Scene - fades in when ready */}
+        <motion.div 
+          className="absolute inset-0 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: owlLoaded ? 1 : 0 }}
+          transition={{ duration: 0.5, ease: premiumEasing }}
+          style={{ y, opacity: owlLoaded ? opacity : 0 }}
+        >
+          <OwlScene onLoaded={() => setOwlLoaded(true)} />
+        </motion.div>
+      </div>
 
       {/* Grid Overlay */}
       <div 
