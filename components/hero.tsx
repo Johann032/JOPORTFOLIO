@@ -148,8 +148,11 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6 z-10 pointer-events-none"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10 pointer-events-none"
         >
+          <span className="text-[10px] font-mono tracking-[0.2em] text-white/50 uppercase">
+            Scroll Down
+          </span>
           <motion.div 
             animate={{ 
               y: [0, 8, 0],
