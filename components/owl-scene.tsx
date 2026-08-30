@@ -1,10 +1,10 @@
 "use client"
 
-import { Canvas, useFrame, useThree, ThreeEvent, createPortal } from "@react-three/fiber"
+import { Canvas, useFrame, useThree, createPortal } from "@react-three/fiber"
 import { useGLTF, AdaptiveDpr, AdaptiveEvents, useFBO } from "@react-three/drei"
 import { Suspense, useRef, useEffect, Component, ReactNode, useMemo, useState } from "react"
 import * as THREE from "three"
-import { OwlModal } from "./owl-modal"
+
 
 class ModelErrorBoundary extends Component<{ fallback: ReactNode, children: ReactNode }, { hasError: boolean }> {
   constructor(props: { fallback: ReactNode, children: ReactNode }) {
@@ -20,7 +20,7 @@ class ModelErrorBoundary extends Component<{ fallback: ReactNode, children: Reac
   }
 }
 
-function HalftoneOwl({ url, onModalOpen, onLoaded }: { url: string, onModalOpen: () => void, onLoaded?: () => void }) {
+function HalftoneOwl({ url, onLoaded }: { url: string, onLoaded?: () => void }) {
   const { size, camera } = useThree()
   const isMobile = size.width < 768
   const isTablet = size.width >= 768 && size.width < 1024
@@ -79,7 +79,7 @@ function HalftoneOwl({ url, onModalOpen, onLoaded }: { url: string, onModalOpen:
   const pointer = useRef({ x: 0, y: 0 })
   const lastPointerTime = useRef(0)
   const intersectionPoint = useRef(new THREE.Vector3())
-  const clickPulseTime = useRef(0)
+
   
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   useEffect(() => {
@@ -295,16 +295,7 @@ function HalftoneOwl({ url, onModalOpen, onLoaded }: { url: string, onModalOpen:
         document.body.style.cursor = "auto"
       }
       
-      if (clickPulseTime.current > 0) {
-        const pAge = now - clickPulseTime.current
-        if (pAge < 800) {
-          const progress = pAge / 800
-          shaderMat.uniforms.uPulse.value = (1.0 - progress) * Math.sin(progress * Math.PI)
-        } else {
-          shaderMat.uniforms.uPulse.value = 0.0
-          clickPulseTime.current = 0
-        }
-      }
+
     }
 
     // 2. Render Hidden Scene to FBO
@@ -364,15 +355,7 @@ function HalftoneOwl({ url, onModalOpen, onLoaded }: { url: string, onModalOpen:
     }
   })
 
-  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
-    e.stopPropagation()
-    if (clickPulseTime.current === 0) {
-      clickPulseTime.current = Date.now()
-      setTimeout(() => {
-        onModalOpen()
-      }, 500)
-    }
-  }
+
 
   return (
     <>
@@ -390,11 +373,7 @@ function HalftoneOwl({ url, onModalOpen, onLoaded }: { url: string, onModalOpen:
       {/* Main Visible 2D Dot Matrix */}
       <points geometry={gridGeo} material={shaderMat} />
 
-      {/* Lightweight Proxy for Click Hitbox */}
-      <mesh visible={false} onClick={handlePointerDown} position={[0, yOffset, 0]}>
-        <boxGeometry args={[3.0, 4.0, 2]} />
-        <meshBasicMaterial />
-      </mesh>
+
     </>
   )
 }
@@ -410,7 +389,6 @@ function FallbackVisual() {
 
 export function OwlScene({ onLoaded }: { onLoaded?: () => void }) {
   const [dpr, setDpr] = useState<[number, number]>([1, 2])
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const isMobileDevice = window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
@@ -424,11 +402,10 @@ export function OwlScene({ onLoaded }: { onLoaded?: () => void }) {
         <AdaptiveEvents />
         <ModelErrorBoundary fallback={<FallbackVisual />}>
           <Suspense fallback={null}>
-            <HalftoneOwl url="/models/cyber-owl.glb" onModalOpen={() => setIsModalOpen(true)} onLoaded={onLoaded} />
+            <HalftoneOwl url="/models/cyber-owl.glb" onLoaded={onLoaded} />
           </Suspense>
         </ModelErrorBoundary>
       </Canvas>
-      <OwlModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   )
 }

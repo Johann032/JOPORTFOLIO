@@ -8,7 +8,7 @@ import { ResumeModal } from "@/components/resume-modal"
 import { site } from "@/lib/site"
 import { scrollToSection } from "@/lib/scroll"
 import { useIntro } from "@/components/intro-context"
-import { useCh3rState } from "@/components/ch3r-context"
+
 
 const navItems = [
   { name: "About", href: "/#about" },
@@ -21,7 +21,7 @@ const navItems = [
 export function Navigation() {
   const pathname = usePathname()
   const { isIntroComplete, isMounted, isIntroSkipped } = useIntro()
-  const { activeSection } = useCh3rState()
+
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -113,20 +113,9 @@ export function Navigation() {
                 <Link
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className={`text-sm transition-all duration-300 relative font-medium ${
-                    activeSection === item.href.replace('/#', '')
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-white"
-                  }`}
+                  className="text-sm transition-all duration-300 relative font-medium text-muted-foreground hover:text-white"
                 >
                   {item.name}
-                  {activeSection === item.href.replace('/#', '') && (
-                    <motion.div
-                      layoutId="activeSection"
-                      className="absolute -bottom-1 left-0 right-0 h-px bg-foreground"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
                 </Link>
               </motion.li>
             ))}

@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { IntroProvider } from '@/components/intro-context'
-import { Ch3rProvider } from '@/components/ch3r-context'
-import { CH3RCompanion } from '@/components/ch3r'
+
 import './globals.css'
 
 const inter = Inter({ 
@@ -64,7 +63,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-background text-foreground`}>
         <IntroProvider>
-          <Ch3rProvider>
+
             {/* Global Background Layers */}
             <div className="fixed inset-0 z-[-1] bg-background">
               <div className="absolute inset-0 bg-engineering-grid" />
@@ -75,8 +74,7 @@ export default function RootLayout({
             <div className="relative z-0">
               {children}
             </div>
-            <CH3RCompanion />
-          </Ch3rProvider>
+
         </IntroProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
