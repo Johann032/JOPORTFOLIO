@@ -43,15 +43,25 @@ export function Hero() {
     >
       {/* 3D Canvas Background Layer with Placeholder */}
       <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
-        {/* The Placeholder - extremely faint monochrome glow */}
+        {/* The Placeholder - minimal dot silhouette */}
         <motion.div
           initial={{ opacity: 1 }}
           animate={{ opacity: owlLoaded ? 0 : 1 }}
-          transition={{ duration: 0.5, ease: premiumEasing }}
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          transition={{ duration: 0.4, ease: premiumEasing }}
+          className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-8"
         >
-          <div className="w-[30vw] h-[30vw] max-w-[300px] max-h-[300px] rounded-full bg-white/5 blur-3xl opacity-30" />
-          <div className="absolute w-[20vw] h-[40vw] max-w-[200px] max-h-[400px] rounded-full bg-white/5 blur-2xl opacity-20 mix-blend-screen" />
+          <div 
+            className="w-[25vw] h-[35vw] max-w-[180px] max-h-[250px] opacity-[0.15]"
+            style={{
+              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,1) 1px, transparent 1px)',
+              backgroundSize: '8px 8px',
+              maskImage: 'radial-gradient(ellipse at center, black 10%, transparent 70%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at center, black 10%, transparent 70%)'
+            }}
+          />
+          <div className="text-[10px] font-mono tracking-[0.3em] text-white/30 uppercase">
+            INITIALIZING
+          </div>
         </motion.div>
 
         {/* The actual 3D Scene - fades in when ready */}
